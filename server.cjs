@@ -38,3 +38,4 @@ const port = 5000;
 app.listen(port, () => {
   console.log(`Görsel yükleme servisi http://localhost:${port} adresinde çalışıyor.`);
 });
+ .
