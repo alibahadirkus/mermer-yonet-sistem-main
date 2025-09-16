@@ -20,6 +20,8 @@ const Products = () => {
   // Debug log
   console.log('Products component - products:', products);
   console.log('Products component - categories:', categories);
+  console.log('Products length:', products.length);
+  console.log('Categories length:', categories.length);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);

@@ -180,14 +180,21 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const handleAddProduct = async (formData: FormData) => {
     try {
+      console.log('Adding product with form data:', formData);
       const newProduct = await addProduct(formData);
-      setProducts(prev => [...prev, newProduct]);
+      console.log('Product added successfully:', newProduct);
+      setProducts(prev => {
+        const updated = [...prev, newProduct];
+        console.log('Updated products array:', updated);
+        return updated;
+      });
       
       toast({
         title: 'Başarılı',
         description: 'Ürün başarıyla eklendi.',
       });
     } catch (err) {
+      console.error('Ürün ekleme hatası:', err);
       setError('Ürün eklenirken bir hata oluştu');
       throw err;
     }
