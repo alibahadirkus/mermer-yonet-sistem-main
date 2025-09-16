@@ -46,11 +46,6 @@ app.use('/src', express.static('public'));
 // Frontend static dosyalarını serve et
 app.use(express.static('dist'));
 
-// SPA için tüm route'ları frontend'e yönlendir
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
 // MySQL bağlantısı
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
@@ -322,6 +317,11 @@ app.delete('/api/categories/:id', (req, res) => {
     }
     res.json({ message: 'Kategori başarıyla silindi' });
   });
+});
+
+// SPA için tüm route'ları frontend'e yönlendir (API route'larından sonra)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
