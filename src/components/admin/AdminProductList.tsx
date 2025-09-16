@@ -37,7 +37,7 @@ const AdminProductList = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    category: "",
+    category: "none",
     image: null as File | null,
     pdf: null as File | null
   });
@@ -48,7 +48,7 @@ const AdminProductList = () => {
     setFormData({
       name: "",
       description: "",
-      category: "",
+      category: "none",
       image: null,
       pdf: null
     });
@@ -59,7 +59,9 @@ const AdminProductList = () => {
       const data = new FormData();
       data.append('name', formData.name);
       data.append('description', formData.description);
-      data.append('category', formData.category);
+      if (formData.category && formData.category !== 'none') {
+        data.append('category', formData.category);
+      }
       if (formData.image) data.append('image', formData.image);
       if (formData.pdf) data.append('pdf', formData.pdf);
 
@@ -86,7 +88,9 @@ const AdminProductList = () => {
       const data = new FormData();
       data.append('name', formData.name);
       data.append('description', formData.description);
-      data.append('category', formData.category);
+      if (formData.category && formData.category !== 'none') {
+        data.append('category', formData.category);
+      }
       if (formData.image) data.append('image', formData.image);
       if (formData.pdf) data.append('pdf', formData.pdf);
 
@@ -132,7 +136,7 @@ const AdminProductList = () => {
     setFormData({
       name: product.name,
       description: product.description,
-      category: product.category,
+      category: product.category || "none",
       image: null,
       pdf: null
     });
@@ -254,6 +258,7 @@ const AdminProductList = () => {
                   <SelectValue placeholder="Kategori seçin" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="none">Kategori seçin</SelectItem>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.name}>
                       {cat.name}
@@ -334,6 +339,7 @@ const AdminProductList = () => {
                   <SelectValue placeholder="Kategori seçin" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="none">Kategori seçin</SelectItem>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.name}>
                       {cat.name}
