@@ -33,7 +33,7 @@ services:
       DB_PASSWORD: root
       DB_NAME: websitedb
     ports:
-      - "3000:3000"
+      - "80:3000"
     volumes:
       - ./public:/app/public
     depends_on:
@@ -41,36 +41,7 @@ services:
     networks:
       - mermer_network
 
-  # Frontend
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-      args:
-        VITE_API_URL: http://77.223.133.173:3000/api
-    container_name: mermer_frontend
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    depends_on:
-      - backend
-    networks:
-      - mermer_network
 
-  # Nginx Reverse Proxy
-  nginx:
-    image: nginx:alpine
-    container_name: mermer_nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - mermer_network
 
 volumes:
   mysql_data:

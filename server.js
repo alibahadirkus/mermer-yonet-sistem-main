@@ -42,6 +42,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/images', express.static('public/images'));
 app.use('/pdfs', express.static('public/pdfs'));
 
+// Frontend static dosyalarını serve et
+app.use(express.static('dist'));
+
+// SPA için tüm route'ları frontend'e yönlendir
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 // MySQL bağlantısı
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',

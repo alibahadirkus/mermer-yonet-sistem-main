@@ -6,12 +6,17 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for frontend build)
+RUN npm ci
 
 # Copy source code
-COPY server.js ./
-COPY public/ ./public/
+COPY . .
+
+# Build frontend
+RUN npm run build
+
+# Install only production dependencies for runtime
+RUN npm ci --only=production
 
 # Create directories for uploads
 RUN mkdir -p public/images/products public/images/news public/images/references public/pdfs/products public/pdfs/news public/pdfs/references
