@@ -72,6 +72,8 @@ const storage = multer.diskStorage({
       type = 'news';
     } else if (req.path.includes('references')) {
       type = 'references';
+    } else if (req.path.includes('team')) {
+      type = 'team';
     }
     
     // PDF dosyaları için ayrı klasör
