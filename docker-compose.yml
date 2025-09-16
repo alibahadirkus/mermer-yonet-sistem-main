@@ -50,9 +50,22 @@ services:
     restart: unless-stopped
     environment:
       VITE_API_URL: http://localhost:3000/api
-    ports:
-      - "8080:8080"
     depends_on:
+      - backend
+    networks:
+      - mermer_network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: mermer_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
       - backend
     networks:
       - mermer_network
