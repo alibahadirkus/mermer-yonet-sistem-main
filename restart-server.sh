@@ -11,6 +11,10 @@ git pull origin main
 echo "🛑 Docker container'ları durduruluyor..."
 sudo docker-compose down
 
+# Docker image'ları yeniden build et
+echo "🔨 Docker image'ları yeniden build ediliyor..."
+sudo docker-compose build --no-cache
+
 # Docker container'ları yeniden başlat
 echo "🔄 Docker container'ları başlatılıyor..."
 sudo docker-compose up -d
