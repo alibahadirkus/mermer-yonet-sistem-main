@@ -64,7 +64,7 @@ const Index = () => {
                 <div className="p-1">
                   <div className="overflow-hidden rounded-xl">
                     <img 
-  src="/src/image/acmaden3.jpeg"                     alt="lola White" 
+  src="/images/acmaden3.jpeg"                     alt="lola White" 
   alt="Luxury Marble" 
                       className="w-full aspect-video object-cover"
                     />
@@ -76,7 +76,7 @@ const Index = () => {
                 <div className="p-1">
                   <div className="overflow-hidden rounded-xl">
                     <img 
-  src="/src/image/acmaden2.jpeg"                     alt="Calacatta" 
+  src="/images/acmaden2.jpeg"                     alt="Calacatta" 
  
                       className="w-full aspect-video object-cover"
                     />
@@ -88,7 +88,7 @@ const Index = () => {
                 <div className="p-1">
                   <div className="overflow-hidden rounded-xl">
                     <img 
-  src="/src/image/acmaden1.jpeg"                     alt="Arcana" 
+  src="/images/acmaden1.jpeg"                     alt="Arcana" 
                       className="w-full aspect-video object-cover"
                     />
                   </div>
