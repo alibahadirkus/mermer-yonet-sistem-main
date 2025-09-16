@@ -41,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 // Statik dosyalar için
 app.use('/images', express.static('public/images'));
 app.use('/pdfs', express.static('public/pdfs'));
+app.use('/src', express.static('public'));
 
 // Frontend static dosyalarını serve et
 app.use(express.static('dist'));
