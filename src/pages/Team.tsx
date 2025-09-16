@@ -2,83 +2,71 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Building2, Users, Briefcase, Factory, MapPin, Package, Truck, ClipboardCheck, UserCircle, FileText, ShoppingCart, Users2 } from 'lucide-react';
+import { useContent } from '@/contexts/ContentContext';
 
 const Team = () => {
-  const organization = {
-    founders: {
-      name: "KURUCULAR",
-      position: "",
-      icon: <Building2 className="w-5 h-5 text-gray-500" />,
-      children: [
-        {
-          name: "Ali ZORLAR",
-          position: "Yön. Kur. Bşk. Yrd.",
+  const { teamMembers } = useContent();
+  
+  // API'den gelen veriyi organize et
+  const organizeTeamData = () => {
+    const founders = teamMembers.filter(member => member.department === 'Kurucular');
+    const finance = teamMembers.filter(member => member.department === 'Finans');
+    const bursaDepot = teamMembers.filter(member => member.department === 'Bursa Depo');
+    const bandirmaDepot = teamMembers.filter(member => member.department === 'Bandırma Depo');
+    const exportDept = teamMembers.filter(member => member.department === 'İhracat');
+    
+    return {
+      founders: {
+        name: "KURUCULAR",
+        position: "",
+        icon: <Building2 className="w-5 h-5 text-gray-500" />,
+        children: founders.map(founder => ({
+          name: founder.name,
+          position: founder.position,
           icon: <Users className="w-5 h-5 text-gray-500" />
+        }))
+      },
+      finance: {
+        name: finance[0]?.position || "Finans Müd. & İdari İşler Müd.",
+        position: finance[0]?.name || "Mert GÜLTEN",
+        icon: <UserCircle className="w-5 h-5 text-gray-500" />
+      },
+      depots: [
+        {
+          name: "Bursa dep. Müd.",
+          position: bursaDepot.find(m => m.position.includes('Müd.'))?.name || "Tolga YEŞİLDAĞ",
+          icon: <MapPin className="w-5 h-5 text-gray-500" />,
+          children: bursaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
+            name: member.position,
+            position: member.name,
+            icon: <Users className="w-4 h-4 text-gray-500" />
+          }))
         },
         {
-          name: "Cemal GÜMÜŞ",
-          position: "Yön. Kur. Bşk. Yrd.",
-          icon: <Users className="w-5 h-5 text-gray-500" />
+          name: "Bandırma dep. Müd.",
+          position: bandirmaDepot.find(m => m.position.includes('Müd.'))?.name || "Okan KARAKAHYA",
+          icon: <MapPin className="w-5 h-5 text-gray-500" />,
+          children: bandirmaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
+            name: member.position,
+            position: member.name,
+            icon: <Users className="w-4 h-4 text-gray-500" />
+          }))
         }
-      ]
-    },
-    finance: {
-      name: "Finans Müd. & İdari İşler Müd.",
-      position: "Mert GÜLTEN",
-      icon: <UserCircle className="w-5 h-5 text-gray-500" />
-    },
-    depots: [
-      {
-        name: "Bursa dep. Müd.",
-        position: "Tolga YEŞİLDAĞ",
-        icon: <MapPin className="w-5 h-5 text-gray-500" />,
-        children: [
-          { name: "Vinc operatörü", position: "ARİF", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "forlift operatörü", position: "..........", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "Mutfak Sorumlusu", position: "KEZİBAN", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          {
-            name: "Satış", position: "İ.Furkan ZORLAR", icon: <Users className="w-4 h-4 text-gray-500" />
-          },
-          {
-            name: "Pazarlama", position: "Murat BİLİR", icon: <Users className="w-4 h-4 text-gray-500" />
-          },
-          {
-            name: "Pazarlama", position: "Tolga YEŞİLDAĞ", icon: <Users className="w-4 h-4 text-gray-500" />
-          }
-        ]
-      },
-      {
-        name: "Bandırma dep. Müd.",
-        position: "Okan KARAKAHYA",
-        icon: <MapPin className="w-5 h-5 text-gray-500" />,
-        children: [
-          { name: "Vinc operatörü", position: "İbrahim", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "forlift operatörü", position: "Emre", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "Mutfak Sorumlusu", position: "EMİNE", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "SATIN ALMA Muhasebe", position: "BİLGE", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "Satış Muhasebe", position: "YELİZ", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          { name: "İdari İşler Sorumlusu", position: "Elif Nur", icon: <Users className="w-4 h-4 text-gray-500" /> },
-          {
-            name: "Pazarlama", position: "Murat ÇETİN", icon: <Users className="w-4 h-4 text-gray-500" />
-          },
-          {
-            name: "Pazarlama", position: "Hakan GÜLER", icon: <Users className="w-4 h-4 text-gray-500" />
-          },
-          {
-            name: "Satış", position: "Okan KARAKAHYA", icon: <Users className="w-4 h-4 text-gray-500" />
-          }
-        ]
+      ],
+      export: {
+        name: "İhracat Departmanı",
+        position: exportDept.find(m => m.position.includes('Departmanı'))?.name || "İ.Furkan ZORLAR",
+        icon: <Briefcase className="w-5 h-5 text-gray-500" />,
+        children: exportDept.filter(m => !m.position.includes('Departmanı')).map(member => ({
+          name: member.position,
+          position: member.name,
+          icon: <Users className="w-4 h-4 text-gray-500" />
+        }))
       }
-    ],
-    export: {
-      name: "İhracat Departmanı",
-      position: "İ.Furkan ZORLAR",
-      icon: <Briefcase className="w-5 h-5 text-gray-500" />,
-      children: [
-        { name: "İhracat takibi", position: "Rıdvan", icon: <Users className="w-4 h-4 text-gray-500" /> }
-      ]
-    }
+    };
   };
+
+  const organization = organizeTeamData();
 
   const renderNode = (node: any, level: number = 0) => {
     const isTopLevel = level === 0;

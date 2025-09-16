@@ -68,6 +68,46 @@ INSERT IGNORE INTO categories (name, description) VALUES
 ('MERMER', 'Genel mermer ürünleri'),
 ('YERLİ GRANİT', 'Yerli granit ürünleri');
 
+-- Insert team members
+INSERT IGNORE INTO team_members (name, position, department, parent_id, sort_order) VALUES 
+-- Kurucular (Level 1)
+('Ali ZORLAR', 'Yön. Kur. Bşk. Yrd.', 'Kurucular', NULL, 1),
+('Cemal GÜMÜŞ', 'Yön. Kur. Bşk. Yrd.', 'Kurucular', NULL, 2),
+
+-- Finans Müdürü (Level 1)
+('Mert GÜLTEN', 'Finans Müd. & İdari İşler Müd.', 'Finans', NULL, 3),
+
+-- Bursa Depo Müdürü (Level 1)
+('Tolga YEŞİLDAĞ', 'Bursa dep. Müd.', 'Bursa Depo', NULL, 4),
+
+-- Bandırma Depo Müdürü (Level 1)
+('Okan KARAKAHYA', 'Bandırma dep. Müd.', 'Bandırma Depo', NULL, 5),
+
+-- İhracat Departmanı (Level 1)
+('İ.Furkan ZORLAR', 'İhracat Departmanı', 'İhracat', NULL, 6),
+
+-- Bursa Depo Çalışanları (Level 2)
+('ARİF', 'Vinc operatörü', 'Bursa Depo', 4, 7),
+('..........', 'forlift operatörü', 'Bursa Depo', 4, 8),
+('KEZİBAN', 'Mutfak Sorumlusu', 'Bursa Depo', 4, 9),
+('İ.Furkan ZORLAR', 'Satış', 'Bursa Depo', 4, 10),
+('Murat BİLİR', 'Pazarlama', 'Bursa Depo', 4, 11),
+('Tolga YEŞİLDAĞ', 'Pazarlama', 'Bursa Depo', 4, 12),
+
+-- Bandırma Depo Çalışanları (Level 2)
+('İbrahim', 'Vinc operatörü', 'Bandırma Depo', 5, 13),
+('Emre', 'forlift operatörü', 'Bandırma Depo', 5, 14),
+('EMİNE', 'Mutfak Sorumlusu', 'Bandırma Depo', 5, 15),
+('BİLGE', 'SATIN ALMA Muhasebe', 'Bandırma Depo', 5, 16),
+('YELİZ', 'Satış Muhasebe', 'Bandırma Depo', 5, 17),
+('Elif Nur', 'İdari İşler Sorumlusu', 'Bandırma Depo', 5, 18),
+('Murat ÇETİN', 'Pazarlama', 'Bandırma Depo', 5, 19),
+('Hakan GÜLER', 'Pazarlama', 'Bandırma Depo', 5, 20),
+('Okan KARAKAHYA', 'Satış', 'Bandırma Depo', 5, 21),
+
+-- İhracat Departmanı Çalışanları (Level 2)
+('Rıdvan', 'İhracat takibi', 'İhracat', 6, 22);
+
 -- Insert sample data
 INSERT IGNORE INTO products (name, description, image_path, category) VALUES 
 ('Test Ürün 1', 'Bu bir test ürünüdür', '/images/marble-default.jpg', 'MERMER'),
