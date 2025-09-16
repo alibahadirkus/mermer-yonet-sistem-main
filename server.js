@@ -16,7 +16,8 @@ const allowedOrigins = [
   'http://localhost:8080',
   'http://localhost:8081', 
   'http://localhost:8082',
-  'http://frontend:8080'
+  'http://frontend:8080',
+  'http://77.223.133.173'
 ];
 
 app.use(cors({
@@ -49,7 +50,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME || 'websitedb'
 });
 
-// MySQL bağlantısını kontrol et
+// Database connection test
 db.connect((err) => {
   if (err) {
     console.error('MySQL bağlantı hatası:', err);
@@ -93,11 +94,14 @@ const upload = multer({ storage: storage });
 
 // API Routes
 app.get('/api/products', (req, res) => {
+  console.log('Products API called');
   db.query('SELECT * FROM products ORDER BY created_at DESC', (err, results) => {
     if (err) {
+      console.error('Database error in products:', err);
       res.status(500).json({ error: err.message });
       return;
     }
+    console.log('Products fetched successfully:', results.length);
     res.json(results);
   });
 });
