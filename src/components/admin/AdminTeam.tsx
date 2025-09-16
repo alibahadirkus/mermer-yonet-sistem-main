@@ -38,7 +38,7 @@ const AdminTeam = () => {
     name: "",
     position: "",
     department: "",
-    parent_id: "",
+    parent_id: "none",
     sort_order: 0,
     image: null as File | null
   });
@@ -48,7 +48,7 @@ const AdminTeam = () => {
       name: "",
       position: "",
       department: "",
-      parent_id: "",
+      parent_id: "none",
       sort_order: 0,
       image: null
     });
@@ -61,7 +61,7 @@ const AdminTeam = () => {
     data.append('name', formData.name);
     data.append('position', formData.position);
     data.append('department', formData.department);
-    if (formData.parent_id) {
+    if (formData.parent_id && formData.parent_id !== 'none') {
       data.append('parent_id', formData.parent_id);
     }
     data.append('sort_order', formData.sort_order.toString());
@@ -243,7 +243,7 @@ const AdminTeam = () => {
                   <SelectValue placeholder="Üst yönetici seçin (opsiyonel)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Üst yönetici yok</SelectItem>
+                  <SelectItem value="none">Üst yönetici yok</SelectItem>
                   {parentOptions.map((member) => (
                     <SelectItem key={member.id} value={member.id.toString()}>
                       {member.name}
@@ -328,7 +328,7 @@ const AdminTeam = () => {
                   <SelectValue placeholder="Üst yönetici seçin (opsiyonel)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Üst yönetici yok</SelectItem>
+                  <SelectItem value="none">Üst yönetici yok</SelectItem>
                   {parentOptions.filter(m => m.id !== editingMember?.id).map((member) => (
                     <SelectItem key={member.id} value={member.id.toString()}>
                       {member.name}
