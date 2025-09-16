@@ -61,7 +61,9 @@ const AdminTeam = () => {
     data.append('name', formData.name);
     data.append('position', formData.position);
     data.append('department', formData.department);
-    data.append('parent_id', formData.parent_id);
+    if (formData.parent_id) {
+      data.append('parent_id', formData.parent_id);
+    }
     data.append('sort_order', formData.sort_order.toString());
     if (formData.image) {
       data.append('image', formData.image);
@@ -71,6 +73,7 @@ const AdminTeam = () => {
       if (editingMember) {
         await updateTeamMember(editingMember.id, data);
         setIsEditDialogOpen(false);
+        setEditingMember(null);
       } else {
         await addTeamMember(data);
         setIsAddDialogOpen(false);
@@ -87,7 +90,7 @@ const AdminTeam = () => {
       name: member.name,
       position: member.position,
       department: member.department || "",
-      parent_id: member.parent_id || "",
+      parent_id: member.parent_id ? member.parent_id.toString() : "",
       sort_order: member.sort_order || 0,
       image: null
     });
@@ -193,7 +196,12 @@ const AdminTeam = () => {
       </div>
 
       {/* Add Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
+        setIsAddDialogOpen(open);
+        if (open) {
+          resetForm();
+        }
+      }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Yeni Ekip Üyesi Ekle</DialogTitle>
@@ -273,7 +281,12 @@ const AdminTeam = () => {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
+        setIsEditDialogOpen(open);
+        if (!open) {
+          setEditingMember(null);
+        }
+      }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Ekip Üyesini Düzenle</DialogTitle>
