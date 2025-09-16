@@ -13,7 +13,7 @@ RUN npm ci
 COPY . .
 
 # Set default environment variable for build
-ARG VITE_API_URL=http://backend:3000/api
+ARG VITE_API_URL=http://77.223.133.173:3000/api
 ENV VITE_API_URL=$VITE_API_URL
 
 # Build the application
