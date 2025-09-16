@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import AdminNav from "./AdminNav";
 
 const AdminCategories = () => {
   const { categories, addCategory, updateCategory, deleteCategory } = useContent();
@@ -95,7 +96,10 @@ const AdminCategories = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gray-50">
+      <AdminNav />
+      <div className="container mx-auto px-4 py-8">
+        <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Kategori Yönetimi</h2>
         <Button onClick={() => setIsAddDialogOpen(true)} className="flex items-center gap-2">
@@ -260,6 +264,8 @@ const AdminCategories = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </div>
+      </div>
     </div>
   );
 };
