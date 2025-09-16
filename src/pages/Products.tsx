@@ -16,6 +16,10 @@ import PDFViewer from "@/components/PDFViewer";
 const Products = () => {
   const { products, categories } = useContent();
   const { toast } = useToast();
+  
+  // Debug log
+  console.log('Products component - products:', products);
+  console.log('Products component - categories:', categories);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);

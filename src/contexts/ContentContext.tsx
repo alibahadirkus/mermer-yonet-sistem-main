@@ -154,6 +154,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const fetchContent = async () => {
     try {
       setLoading(true);
+      console.log('Fetching content from API...');
       const [productsData, newsData, referencesData, categoriesData, teamData] = await Promise.all([
         getProducts(),
         getNews(),
@@ -161,6 +162,8 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         getCategories(),
         getTeamMembers()
       ]);
+      console.log('Products fetched:', productsData);
+      console.log('Categories fetched:', categoriesData);
       setProducts(productsData);
       setNews(newsData);
       setReferences(referencesData);
