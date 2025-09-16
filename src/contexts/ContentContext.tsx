@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Product, News, Category, getProducts, addProduct, updateProduct, deleteProduct, getNews, addNews, updateNews, deleteNews, getReferences, addReference, updateReference, deleteReference, getCategories, addCategory, updateCategory, deleteCategory } from '../services/api';
+import { Product, News, Category, TeamMember, getProducts, addProduct, updateProduct, deleteProduct, getNews, addNews, updateNews, deleteNews, getReferences, addReference, updateReference, deleteReference, getCategories, addCategory, updateCategory, deleteCategory, getTeamMembers, addTeamMember, updateTeamMember, deleteTeamMember } from '../services/api';
 
 // Types
 export interface CompanyInfo {
@@ -41,6 +41,7 @@ interface ContentContextType {
   news: News[];
   references: Reference[];
   categories: Category[];
+  teamMembers: TeamMember[];
   isAdmin: boolean;
   setIsAdmin: (isAdmin: boolean) => void;
   addProduct: (formData: FormData) => Promise<void>;
@@ -62,6 +63,9 @@ interface ContentContextType {
   addCategory: (name: string, description: string) => Promise<void>;
   updateCategory: (id: number, name: string, description: string) => Promise<void>;
   deleteCategory: (id: number) => Promise<void>;
+  addTeamMember: (formData: FormData) => Promise<void>;
+  updateTeamMember: (id: number, formData: FormData) => Promise<void>;
+  deleteTeamMember: (id: number) => Promise<void>;
   login: (username: string, password: string) => boolean;
   logout: () => void;
   loading: boolean;
@@ -108,6 +112,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [news, setNews] = useState<News[]>([]);
   const [references, setReferences] = useState<Reference[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -149,16 +154,18 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const fetchContent = async () => {
     try {
       setLoading(true);
-      const [productsData, newsData, referencesData, categoriesData] = await Promise.all([
+      const [productsData, newsData, referencesData, categoriesData, teamData] = await Promise.all([
         getProducts(),
         getNews(),
         getReferences(),
-        getCategories()
+        getCategories(),
+        getTeamMembers()
       ]);
       setProducts(productsData);
       setNews(newsData);
       setReferences(referencesData);
       setCategories(categoriesData);
+      setTeamMembers(teamData);
       setError(null);
     } catch (err) {
       setError('İçerik yüklenirken bir hata oluştu');
@@ -403,6 +410,60 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     localStorage.removeItem('isAdmin');
   };
 
+  // Team functions
+  const handleAddTeamMember = async (formData: FormData) => {
+    try {
+      const newTeamMember = await addTeamMember(formData);
+      setTeamMembers(prev => [...prev, newTeamMember]);
+      toast({
+        title: "Başarılı",
+        description: "Ekip üyesi başarıyla eklendi",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Ekip üyesi eklenirken bir hata oluştu",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdateTeamMember = async (id: number, formData: FormData) => {
+    try {
+      const updatedTeamMember = await updateTeamMember(id, formData);
+      setTeamMembers(prev => prev.map(member => 
+        member.id === id ? updatedTeamMember : member
+      ));
+      toast({
+        title: "Başarılı",
+        description: "Ekip üyesi başarıyla güncellendi",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Ekip üyesi güncellenirken bir hata oluştu",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteTeamMember = async (id: number) => {
+    try {
+      await deleteTeamMember(id);
+      setTeamMembers(prev => prev.filter(member => member.id !== id));
+      toast({
+        title: "Başarılı",
+        description: "Ekip üyesi başarıyla silindi",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Ekip üyesi silinirken bir hata oluştu",
+        variant: "destructive",
+      });
+    }
+  };
+
   const value = {
     products,
     applications,
@@ -411,6 +472,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     news,
     references,
     categories,
+    teamMembers,
     isAdmin,
     setIsAdmin,
     addProduct: handleAddProduct,
@@ -453,6 +515,9 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     addCategory: handleAddCategory,
     updateCategory: handleUpdateCategory,
     deleteCategory: handleDeleteCategory,
+    addTeamMember: handleAddTeamMember,
+    updateTeamMember: handleUpdateTeamMember,
+    deleteTeamMember: handleDeleteTeamMember,
     login,
     logout,
     loading,

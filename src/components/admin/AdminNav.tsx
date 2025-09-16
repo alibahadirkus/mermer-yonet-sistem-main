@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, Package, Newspaper, LogOut, Users, Tag } from 'lucide-react';
+import { Home, Package, Newspaper, LogOut, Users, Tag, UserCheck } from 'lucide-react';
 import { useContent } from '@/contexts/ContentContext';
 
 export default function AdminNav() {
@@ -12,6 +12,7 @@ export default function AdminNav() {
     { to: '/admin/kategoriler', icon: <Tag className="h-4 w-4" />, label: 'Kategoriler' },
     { to: '/admin/haberler', icon: <Newspaper className="h-4 w-4" />, label: 'Haberler' },
     { to: '/admin/referanslar', icon: <Users className="h-4 w-4" />, label: 'Referanslar' },
+    { to: '/admin/ekip', icon: <UserCheck className="h-4 w-4" />, label: 'Ekip' },
   ];
 
   return (

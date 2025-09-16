@@ -18,6 +18,7 @@ import AdminProducts from "./pages/admin/Products";
 import AdminNews from "./pages/admin/News";
 import AdminReferences from "./pages/admin/AdminReferences";
 import AdminCategories from "./pages/admin/Categories";
+import AdminTeam from "./pages/admin/Team";
 import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 import VirtualViewer from '@/pages/VirtualViewer';
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/admin/haberler" element={<AdminNews />} />
             <Route path="/admin/referanslar" element={<AdminReferences />} />
             <Route path="/admin/kategoriler" element={<AdminCategories />} />
+            <Route path="/admin/ekip" element={<AdminTeam />} />
             <Route path="/virtual-viewer" element={<VirtualViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

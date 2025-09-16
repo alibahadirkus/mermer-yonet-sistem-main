@@ -39,6 +39,18 @@ export interface Category {
   updated_at: string;
 }
 
+export interface TeamMember {
+  id: number;
+  name: string;
+  position: string;
+  department?: string;
+  image_path?: string;
+  parent_id?: number;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 // Ürün API'leri
 export const getProducts = async (): Promise<Product[]> => {
   const response = await fetch(`${API_URL}/products`);
@@ -202,5 +214,45 @@ export const deleteCategory = async (id: number): Promise<void> => {
   });
   if (!response.ok) {
     throw new Error('Kategori silinirken bir hata oluştu');
+  }
+};
+
+// Team API'leri
+export const getTeamMembers = async (): Promise<TeamMember[]> => {
+  const response = await fetch(`${API_URL}/team`);
+  if (!response.ok) {
+    throw new Error('Ekip üyeleri yüklenirken bir hata oluştu');
+  }
+  return response.json();
+};
+
+export const addTeamMember = async (formData: FormData): Promise<TeamMember> => {
+  const response = await fetch(`${API_URL}/team`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Ekip üyesi eklenirken bir hata oluştu');
+  }
+  return response.json();
+};
+
+export const updateTeamMember = async (id: number, formData: FormData): Promise<TeamMember> => {
+  const response = await fetch(`${API_URL}/team/${id}`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Ekip üyesi güncellenirken bir hata oluştu');
+  }
+  return response.json();
+};
+
+export const deleteTeamMember = async (id: number): Promise<void> => {
+  const response = await fetch(`${API_URL}/team/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Ekip üyesi silinirken bir hata oluştu');
   }
 }; 

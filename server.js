@@ -320,6 +320,61 @@ app.delete('/api/categories/:id', (req, res) => {
   });
 });
 
+// Team API endpoints
+app.get('/api/team', (req, res) => {
+  db.query('SELECT * FROM team_members ORDER BY sort_order, created_at', (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.post('/api/team', upload.single('image'), (req, res) => {
+  const { name, position, department, parent_id, sort_order } = req.body;
+  const image_path = req.file ? `/images/team/${req.file.filename}` : null;
+
+  db.query(
+    'INSERT INTO team_members (name, position, department, image_path, parent_id, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
+    [name, position, department, image_path, parent_id || null, sort_order || 0],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ id: result.insertId, name, position, department, image_path, parent_id, sort_order });
+    }
+  );
+});
+
+app.put('/api/team/:id', upload.single('image'), (req, res) => {
+  const { name, position, department, parent_id, sort_order } = req.body;
+  const image_path = req.file ? `/images/team/${req.file.filename}` : req.body.existing_image;
+
+  db.query(
+    'UPDATE team_members SET name = ?, position = ?, department = ?, image_path = ?, parent_id = ?, sort_order = ? WHERE id = ?',
+    [name, position, department, image_path, parent_id || null, sort_order || 0, req.params.id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ id: req.params.id, name, position, department, image_path, parent_id, sort_order });
+    }
+  );
+});
+
+app.delete('/api/team/:id', (req, res) => {
+  db.query('DELETE FROM team_members WHERE id = ?', [req.params.id], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ message: 'Ekip üyesi başarıyla silindi' });
+  });
+});
+
 // SPA için tüm route'ları frontend'e yönlendir (API route'larından sonra)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
