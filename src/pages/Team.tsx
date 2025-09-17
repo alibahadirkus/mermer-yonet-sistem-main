@@ -12,11 +12,20 @@ const Team = () => {
   
   // API'den gelen veriyi organize et
   const organizeTeamData = () => {
+    console.log('All team members:', teamMembers);
+    console.log('Team members departments:', teamMembers.map(m => ({ name: m.name, department: m.department, position: m.position })));
+    
     const founders = teamMembers.filter(member => member.department === 'Kurucular');
     const finance = teamMembers.filter(member => member.department === 'Finans');
     const bursaDepot = teamMembers.filter(member => member.department === 'Bursa Depo');
     const bandirmaDepot = teamMembers.filter(member => member.department === 'Bandırma Depo');
     const exportDept = teamMembers.filter(member => member.department === 'İhracat');
+    
+    console.log('Founders:', founders);
+    console.log('Finance:', finance);
+    console.log('Bursa Depot:', bursaDepot);
+    console.log('Bandırma Depot:', bandirmaDepot);
+    console.log('Export Dept:', exportDept);
     
     return {
       founders: {
