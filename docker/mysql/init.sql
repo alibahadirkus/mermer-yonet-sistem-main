@@ -25,6 +25,9 @@ CREATE TABLE IF NOT EXISTS news (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Add video_path column if it doesn't exist
+ALTER TABLE news ADD COLUMN IF NOT EXISTS video_path VARCHAR(255);
+
 -- Create company_references table
 CREATE TABLE IF NOT EXISTS company_references (
     id INT AUTO_INCREMENT PRIMARY KEY,

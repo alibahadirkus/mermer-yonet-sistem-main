@@ -93,6 +93,13 @@ const storage = multer.diskStorage({
         fs.mkdirSync(dir, { recursive: true });
       }
       cb(null, dir);
+    } else if (file.mimetype.startsWith('video/')) {
+      // Video dosyaları için ayrı klasör
+      const dir = `public/videos/${type}`;
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      cb(null, dir);
     } else {
       const dir = `public/images/${type}`;
       if (!fs.existsSync(dir)) {
@@ -180,36 +187,44 @@ app.get('/api/news', (req, res) => {
   });
 });
 
-app.post('/api/news', upload.single('image'), (req, res) => {
+app.post('/api/news', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 }
+]), (req, res) => {
   const { title, summary, content } = req.body;
-  const image_path = req.file ? `/images/news/${req.file.filename}` : null;
+  const image_path = req.files?.image ? `/images/news/${req.files.image[0].filename}` : null;
+  const video_path = req.files?.video ? `/videos/news/${req.files.video[0].filename}` : null;
 
   db.query(
-    'INSERT INTO news (title, summary, content, image_path) VALUES (?, ?, ?, ?)',
-    [title, summary, content, image_path],
+    'INSERT INTO news (title, summary, content, image_path, video_path) VALUES (?, ?, ?, ?, ?)',
+    [title, summary, content, image_path, video_path],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ id: result.insertId, title, summary, content, image_path });
+      res.json({ id: result.insertId, title, summary, content, image_path, video_path });
     }
   );
 });
 
-app.put('/api/news/:id', upload.single('image'), (req, res) => {
+app.put('/api/news/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 }
+]), (req, res) => {
   const { title, summary, content } = req.body;
-  const image_path = req.file ? `/images/news/${req.file.filename}` : req.body.image_path;
+  const image_path = req.files?.image ? `/images/news/${req.files.image[0].filename}` : req.body.image_path;
+  const video_path = req.files?.video ? `/videos/news/${req.files.video[0].filename}` : req.body.video_path;
 
   db.query(
-    'UPDATE news SET title = ?, summary = ?, content = ?, image_path = ? WHERE id = ?',
-    [title, summary, content, image_path, req.params.id],
+    'UPDATE news SET title = ?, summary = ?, content = ?, image_path = ?, video_path = ? WHERE id = ?',
+    [title, summary, content, image_path, video_path, req.params.id],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ id: req.params.id, title, summary, content, image_path });
+      res.json({ id: req.params.id, title, summary, content, image_path, video_path });
     }
   );
 });

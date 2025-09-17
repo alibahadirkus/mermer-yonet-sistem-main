@@ -19,7 +19,8 @@ const News = () => {
     title: '',
     content: '',
     summary: '',
-    file: null as File | null,
+    imageFile: null as File | null,
+    videoFile: null as File | null,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,8 +32,11 @@ const News = () => {
       if (formData.summary) {
         formDataToSend.append('summary', formData.summary);
       }
-      if (formData.file) {
-        formDataToSend.append('image', formData.file);
+      if (formData.imageFile) {
+        formDataToSend.append('image', formData.imageFile);
+      }
+      if (formData.videoFile) {
+        formDataToSend.append('video', formData.videoFile);
       }
 
       if (editingNews) {
@@ -94,7 +98,8 @@ const News = () => {
       title: '',
       content: '',
       summary: '',
-      file: null,
+      imageFile: null,
+      videoFile: null,
     });
     setEditingNews(null);
   };
@@ -146,9 +151,20 @@ const News = () => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] || null })}
-                    required={!editingNews}
+                    onChange={(e) => setFormData({ ...formData, imageFile: e.target.files?.[0] || null })}
                   />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Video</label>
+                  <Input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => setFormData({ ...formData, videoFile: e.target.files?.[0] || null })}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    MP4, WebM, OGG formatları desteklenir
+                  </p>
                 </div>
                 <Button type="submit" className="w-full">
                   {editingNews ? 'Güncelle' : 'Ekle'}

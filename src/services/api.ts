@@ -17,6 +17,7 @@ export interface News {
   content: string;
   summary?: string;
   image_path: string;
+  video_path?: string;
   created_at: string;
   updated_at: string;
 }

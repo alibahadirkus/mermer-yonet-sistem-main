@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { useContent } from "@/contexts/ContentContext";
+import VideoPlayer from "@/components/VideoPlayer";
+import { Play, Image } from "lucide-react";
 
 const News = () => {
   const { companyInfo, news } = useContent();
@@ -29,17 +31,40 @@ const News = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {news.map((item) => (
               <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src={item.image_path} 
-                    alt={item.title} 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://placehold.co/600x400?text=Resim+Yok';
-                      handleImageError(item.id.toString());
-                    }}
-                  />
+                <div className="h-64 overflow-hidden relative">
+                  {item.video_path ? (
+                    <VideoPlayer 
+                      src={item.video_path} 
+                      title={item.title}
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <img 
+                      src={item.image_path} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://placehold.co/600x400?text=Resim+Yok';
+                        handleImageError(item.id.toString());
+                      }}
+                    />
+                  )}
+                  
+                  {/* Media Type Indicator */}
+                  <div className="absolute top-2 right-2">
+                    {item.video_path ? (
+                      <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                        <Play className="h-3 w-3" />
+                        Video
+                      </div>
+                    ) : (
+                      <div className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                        <Image className="h-3 w-3" />
+                        Resim
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
