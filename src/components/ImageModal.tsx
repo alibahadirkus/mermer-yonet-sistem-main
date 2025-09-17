@@ -11,6 +11,8 @@ interface ImageModalProps {
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, imageUrl, title }) => {
+  console.log('ImageModal render:', { isOpen, imageUrl, title });
+  
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = imageUrl;
@@ -20,7 +22,10 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, imageUrl, titl
     document.body.removeChild(link);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log('ImageModal not open, returning null');
+    return null;
+  }
 
   return (
     <AnimatePresence>
