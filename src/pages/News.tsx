@@ -47,8 +47,12 @@ const News = () => {
                         top: 0,
                         left: 0
                       }}
+                      onLoadStart={() => console.log('Video yüklenmeye başladı:', item.video_path)}
+                      onCanPlay={() => console.log('Video oynatılabilir:', item.video_path)}
                       onError={(e) => {
                         console.error('Video yükleme hatası:', e);
+                        console.error('Video URL:', item.video_path);
+                        console.error('Video element:', e.target);
                         const target = e.target as HTMLVideoElement;
                         target.style.display = 'none';
                         // Hata durumunda resim göster
@@ -58,6 +62,7 @@ const News = () => {
                             <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
                               <div class="text-center">
                                 <p class="text-sm">Video yüklenemedi</p>
+                                <p class="text-xs">URL: ${item.video_path}</p>
                                 <p class="text-xs">Desteklenen formatlar: MP4, WebM, OGG</p>
                               </div>
                             </div>

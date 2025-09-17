@@ -34,7 +34,8 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
 }));
 
 // Body parser middleware
@@ -44,6 +45,17 @@ app.use(express.urlencoded({ extended: true }));
 // Statik dosyalar için
 app.use('/images', express.static('public/images'));
 app.use('/pdfs', express.static('public/pdfs'));
+app.use('/videos', express.static('public/videos', {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.mp4')) {
+      res.setHeader('Content-Type', 'video/mp4');
+    } else if (path.endsWith('.webm')) {
+      res.setHeader('Content-Type', 'video/webm');
+    } else if (path.endsWith('.ogg')) {
+      res.setHeader('Content-Type', 'video/ogg');
+    }
+  }
+}));
 app.use('/src', express.static('public'));
 
 // Frontend static dosyalarını serve et
