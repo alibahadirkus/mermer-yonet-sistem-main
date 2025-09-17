@@ -75,13 +75,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-marble-100 shadow-lg z-20">
           <div className="container mx-auto px-4 py-4">
+            <div className="mb-2 text-sm text-gray-500">Mobile menu is open</div>
             <nav className="flex flex-col space-y-4">
               {menuItems.map((item) => (
                 <Link 
                   key={item.href}
                   to={item.href} 
                   className={`text-marble-800 hover:text-gold-600 transition-colors py-2 px-4 rounded-md ${isActive(item.href) ? 'bg-gold-50 font-semibold text-gold-600' : 'hover:bg-gray-50'}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    console.log('Menu item clicked:', item.label);
+                    setIsMobileMenuOpen(false);
+                  }}
                 >
                   {item.label}
                 </Link>

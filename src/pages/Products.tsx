@@ -60,6 +60,7 @@ const Products = () => {
   };
 
   const handleImageClick = (imagePath: string, productName: string) => {
+    console.log('Image clicked:', imagePath, productName);
     setSelectedImage(imagePath);
     setImageTitle(productName);
   };
