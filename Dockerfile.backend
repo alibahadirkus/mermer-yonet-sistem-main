@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Install only production dependencies for runtime
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Create directories for uploads
 RUN mkdir -p public/images/products public/images/news public/images/references public/images/team public/pdfs/products public/pdfs/news public/pdfs/references
