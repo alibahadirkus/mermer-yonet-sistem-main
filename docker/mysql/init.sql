@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS news (
 
 -- Add video_path column if it doesn't exist
 ALTER TABLE news ADD COLUMN IF NOT EXISTS video_path VARCHAR(255);
+ALTER TABLE news ADD COLUMN IF NOT EXISTS video_link VARCHAR(500);
 
 -- Create company_references table
 CREATE TABLE IF NOT EXISTS company_references (

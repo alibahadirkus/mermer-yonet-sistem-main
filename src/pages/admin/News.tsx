@@ -21,6 +21,7 @@ const News = () => {
     summary: '',
     imageFile: null as File | null,
     videoFile: null as File | null,
+    videoLink: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,6 +38,9 @@ const News = () => {
       }
       if (formData.videoFile) {
         formDataToSend.append('video', formData.videoFile);
+      }
+      if (formData.videoLink) {
+        formDataToSend.append('video_link', formData.videoLink);
       }
 
       if (editingNews) {
@@ -70,7 +74,9 @@ const News = () => {
       title: news.title,
       content: news.content,
       summary: news.summary || '',
-      file: null,
+      imageFile: null,
+      videoFile: null,
+      videoLink: news.video_link || '',
     });
     setIsDialogOpen(true);
   };
@@ -100,6 +106,7 @@ const News = () => {
       summary: '',
       imageFile: null,
       videoFile: null,
+      videoLink: '',
     });
     setEditingNews(null);
   };
@@ -156,7 +163,7 @@ const News = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Video</label>
+                  <label className="block text-sm font-medium mb-1">Video Dosyası</label>
                   <Input
                     type="file"
                     accept="video/*"
@@ -164,6 +171,19 @@ const News = () => {
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     MP4, WebM, OGG formatları desteklenir
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Video Linki (YouTube, Vimeo, vb.)</label>
+                  <Input
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    value={formData.videoLink}
+                    onChange={(e) => setFormData({ ...formData, videoLink: e.target.value })}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    YouTube, Vimeo veya diğer video platformlarından link yapıştırın
                   </p>
                 </div>
                 <Button type="submit" className="w-full">

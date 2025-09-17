@@ -191,19 +191,19 @@ app.post('/api/news', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'video', maxCount: 1 }
 ]), (req, res) => {
-  const { title, summary, content } = req.body;
+  const { title, summary, content, video_link } = req.body;
   const image_path = req.files?.image ? `/images/news/${req.files.image[0].filename}` : null;
   const video_path = req.files?.video ? `/videos/news/${req.files.video[0].filename}` : null;
 
   db.query(
-    'INSERT INTO news (title, summary, content, image_path, video_path) VALUES (?, ?, ?, ?, ?)',
-    [title, summary, content, image_path, video_path],
+    'INSERT INTO news (title, summary, content, image_path, video_path, video_link) VALUES (?, ?, ?, ?, ?, ?)',
+    [title, summary, content, image_path, video_path, video_link],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ id: result.insertId, title, summary, content, image_path, video_path });
+      res.json({ id: result.insertId, title, summary, content, image_path, video_path, video_link });
     }
   );
 });
@@ -212,19 +212,19 @@ app.put('/api/news/:id', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'video', maxCount: 1 }
 ]), (req, res) => {
-  const { title, summary, content } = req.body;
+  const { title, summary, content, video_link } = req.body;
   const image_path = req.files?.image ? `/images/news/${req.files.image[0].filename}` : req.body.image_path;
   const video_path = req.files?.video ? `/videos/news/${req.files.video[0].filename}` : req.body.video_path;
 
   db.query(
-    'UPDATE news SET title = ?, summary = ?, content = ?, image_path = ?, video_path = ? WHERE id = ?',
-    [title, summary, content, image_path, video_path, req.params.id],
+    'UPDATE news SET title = ?, summary = ?, content = ?, image_path = ?, video_path = ?, video_link = ? WHERE id = ?',
+    [title, summary, content, image_path, video_path, video_link, req.params.id],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ id: req.params.id, title, summary, content, image_path, video_path });
+      res.json({ id: req.params.id, title, summary, content, image_path, video_path, video_link });
     }
   );
 });

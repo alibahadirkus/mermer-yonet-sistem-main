@@ -3,7 +3,8 @@ import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { useContent } from "@/contexts/ContentContext";
 import VideoPlayer from "@/components/VideoPlayer";
-import { Play, Image } from "lucide-react";
+import { Play, Image, ExternalLink } from "lucide-react";
+import { getVideoEmbedUrl, isVideoLink, getVideoThumbnail } from "@/utils/videoUtils";
 
 const News = () => {
   const { companyInfo, news } = useContent();
@@ -38,6 +39,30 @@ const News = () => {
                       title={item.title}
                       className="w-full h-full"
                     />
+                  ) : item.video_link && isVideoLink(item.video_link) ? (
+                    <div className="w-full h-full relative">
+                      <iframe
+                        src={getVideoEmbedUrl(item.video_link) || ''}
+                        className="w-full h-full"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={item.title}
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                        <div className="opacity-0 hover:opacity-100 transition-opacity duration-300">
+                          <a
+                            href={item.video_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-red-500 text-white px-3 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-red-600 transition-colors"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Orijinal Videoyu Aç
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <img 
                       src={item.image_path} 
@@ -57,6 +82,11 @@ const News = () => {
                       <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
                         <Play className="h-3 w-3" />
                         Video
+                      </div>
+                    ) : item.video_link ? (
+                      <div className="bg-purple-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                        <ExternalLink className="h-3 w-3" />
+                        Link
                       </div>
                     ) : (
                       <div className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
