@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Link to="/" className="flex items-center space-x-2">
             <div className="h-10 w-10 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/ae66d9f3-34f6-4152-babb-d29ecf4dd8f4.png" 
+                src="/alibahadir-uploads/ae66d9f3-34f6-4152-babb-d29ecf4dd8f4.png" 
                 alt="AC Madencilik Logo" 
                 className="h-10 w-auto"
               />
