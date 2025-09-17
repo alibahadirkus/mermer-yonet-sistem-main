@@ -91,6 +91,19 @@ export const deleteProduct = async (id: number): Promise<void> => {
   }
 };
 
+// PDF'den ürün ekleme
+export const addProductsFromPdf = async (formData: FormData): Promise<{message: string, products: Product[], extractedText: string}> => {
+  const response = await fetch(`${API_URL}/products/from-pdf`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'PDF\'den ürün eklenirken bir hata oluştu');
+  }
+  return response.json();
+};
+
 // Haber API'leri
 export const getNews = async (): Promise<News[]> => {
   const response = await fetch(`${API_URL}/news`);

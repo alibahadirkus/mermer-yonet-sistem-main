@@ -5,6 +5,9 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import pdf from 'pdf-parse';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -382,6 +385,128 @@ app.delete('/api/team/:id', (req, res) => {
     }
     res.json({ message: 'Ekip üyesi başarıyla silindi' });
   });
+});
+
+// PDF işleme için yardımcı fonksiyonlar
+const execAsync = promisify(exec);
+
+// PDF'yi sayfalara ayırma fonksiyonu
+async function convertPdfToImages(pdfPath, outputDir) {
+  try {
+    // Çıktı dizinini oluştur
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    // ImageMagick ile PDF'yi JPG'lere dönüştür
+    const command = `magick "${pdfPath}" "${outputDir}/page-%d.jpg"`;
+    await execAsync(command);
+    
+    // Oluşturulan dosyaları listele
+    const files = fs.readdirSync(outputDir).filter(file => file.endsWith('.jpg'));
+    return files.sort((a, b) => {
+      const aNum = parseInt(a.match(/\d+/)[0]);
+      const bNum = parseInt(b.match(/\d+/)[0]);
+      return aNum - bNum;
+    });
+  } catch (error) {
+    console.error('PDF dönüştürme hatası:', error);
+    throw error;
+  }
+}
+
+// PDF'den metin çıkarma fonksiyonu
+async function extractTextFromPdf(pdfPath) {
+  try {
+    const dataBuffer = fs.readFileSync(pdfPath);
+    const data = await pdf(dataBuffer);
+    return data.text;
+  } catch (error) {
+    console.error('PDF metin çıkarma hatası:', error);
+    throw error;
+  }
+}
+
+// PDF'den ürün isimlerini çıkarma fonksiyonu (basit regex ile)
+function extractProductNames(text) {
+  // Bu fonksiyon PDF içeriğine göre özelleştirilebilir
+  const lines = text.split('\n').filter(line => line.trim().length > 0);
+  const productNames = [];
+  
+  // Basit bir pattern - gerçek kullanımda daha gelişmiş olmalı
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    // Büyük harfle başlayan ve belirli uzunlukta olan satırları ürün adı olarak kabul et
+    if (trimmed.length > 3 && trimmed.length < 100 && 
+        /^[A-ZÇĞIİÖŞÜ][a-zçğıiöşü\s\d\-\.]+$/.test(trimmed)) {
+      productNames.push(trimmed);
+    }
+  });
+  
+  return productNames;
+}
+
+// PDF'den ürün ekleme endpoint'i
+app.post('/api/products/from-pdf', upload.single('pdf'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'PDF dosyası gerekli' });
+    }
+
+    const { category } = req.body;
+    const pdfPath = req.file.path;
+    const pdfName = path.parse(req.file.originalname).name;
+    
+    // PDF'yi sayfalara ayır
+    const outputDir = path.join(__dirname, 'public', 'images', 'products', pdfName);
+    const imageFiles = await convertPdfToImages(pdfPath, outputDir);
+    
+    // PDF'den metin çıkar
+    const text = await extractTextFromPdf(pdfPath);
+    const productNames = extractProductNames(text);
+    
+    // Her sayfa için ürün oluştur
+    const createdProducts = [];
+    
+    for (let i = 0; i < imageFiles.length; i++) {
+      const imagePath = `/images/products/${pdfName}/${imageFiles[i]}`;
+      const productName = productNames[i] || `${pdfName} - Sayfa ${i + 1}`;
+      const description = `PDF'den otomatik oluşturulan ürün - ${pdfName}`;
+      
+      // Veritabanına ekle
+      const insertResult = await new Promise((resolve, reject) => {
+        db.query(
+          'INSERT INTO products (name, description, image_path, category) VALUES (?, ?, ?, ?)',
+          [productName, description, imagePath, category || 'PDF'],
+          (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+          }
+        );
+      });
+      
+      createdProducts.push({
+        id: insertResult.insertId,
+        name: productName,
+        description,
+        image_path: imagePath,
+        category: category || 'PDF'
+      });
+    }
+    
+    // Geçici PDF dosyasını sil
+    fs.unlinkSync(pdfPath);
+    
+    res.json({
+      message: `${createdProducts.length} ürün başarıyla oluşturuldu`,
+      products: createdProducts,
+      extractedText: text.substring(0, 500) + '...' // İlk 500 karakter
+    });
+    
+  } catch (error) {
+    console.error('PDF ürün ekleme hatası:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // SPA için tüm route'ları frontend'e yönlendir (API route'larından sonra)

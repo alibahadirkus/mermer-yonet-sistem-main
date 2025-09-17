@@ -25,14 +25,16 @@ import { Plus, Edit, Trash, FileText, Eye } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const AdminProductList = () => {
-  const { products, categories, addProduct, updateProduct, deleteProduct } = useContent();
+  const { products, categories, addProduct, updateProduct, deleteProduct, addProductsFromPdf } = useContent();
   const { toast } = useToast();
   
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isPdfDialogOpen, setIsPdfDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [deletingProduct, setDeletingProduct] = useState<any>(null);
+  const [pdfResult, setPdfResult] = useState<any>(null);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -40,6 +42,11 @@ const AdminProductList = () => {
     category: "none",
     image: null as File | null,
     pdf: null as File | null
+  });
+
+  const [pdfFormData, setPdfFormData] = useState({
+    pdf: null as File | null,
+    category: "none"
   });
 
   // Categories are now loaded from the context
@@ -143,6 +150,46 @@ const AdminProductList = () => {
     setIsEditDialogOpen(true);
   };
 
+  const handlePdfUpload = async () => {
+    if (!pdfFormData.pdf) {
+      toast({
+        title: "Hata",
+        description: "Lütfen bir PDF dosyası seçin.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const data = new FormData();
+      data.append('pdf', pdfFormData.pdf);
+      if (pdfFormData.category && pdfFormData.category !== 'none') {
+        data.append('category', pdfFormData.category);
+      }
+
+      const result = await addProductsFromPdf(data);
+      setPdfResult(result);
+      setPdfFormData({ pdf: null, category: "none" });
+      setIsPdfDialogOpen(false);
+      
+      toast({
+        title: "Başarılı",
+        description: result.message,
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "PDF'den ürün eklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const resetPdfForm = () => {
+    setPdfFormData({ pdf: null, category: "none" });
+    setPdfResult(null);
+  };
+
   const openDeleteDialog = (product: any) => {
     setDeletingProduct(product);
     setIsDeleteDialogOpen(true);
@@ -152,10 +199,16 @@ const AdminProductList = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Ürün Yönetimi</h2>
-        <Button onClick={() => setIsAddDialogOpen(true)} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Yeni Ürün Ekle
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setIsPdfDialogOpen(true)} variant="outline" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            PDF'den Ürün Ekle
+          </Button>
+          <Button onClick={() => setIsAddDialogOpen(true)} className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Yeni Ürün Ekle
+          </Button>
+        </div>
       </div>
 
       <div className="border rounded-lg">
@@ -426,6 +479,81 @@ const AdminProductList = () => {
               variant="destructive"
             >
               Sil
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* PDF Upload Dialog */}
+      <Dialog open={isPdfDialogOpen} onOpenChange={(open) => {
+        setIsPdfDialogOpen(open);
+        if (!open) resetPdfForm();
+      }}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>PDF'den Ürün Ekle</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="pdf-file">PDF Dosyası</Label>
+              <Input
+                id="pdf-file"
+                type="file"
+                accept=".pdf"
+                onChange={(e) => setPdfFormData({...pdfFormData, pdf: e.target.files?.[0] || null})}
+                className="mt-1"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                PDF dosyası her sayfa için ayrı bir ürün oluşturacaktır.
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="pdf-category">Kategori</Label>
+              <Select 
+                value={pdfFormData.category} 
+                onValueChange={(value) => setPdfFormData({...pdfFormData, category: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Kategori seçin" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Kategori seçin</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {pdfResult && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h4 className="font-semibold text-green-800 mb-2">İşlem Tamamlandı!</h4>
+                <p className="text-green-700 text-sm mb-2">{pdfResult.message}</p>
+                <div className="text-xs text-green-600">
+                  <p><strong>Çıkarılan metin (ilk 200 karakter):</strong></p>
+                  <p className="mt-1 font-mono bg-white p-2 rounded border">
+                    {pdfResult.extractedText.substring(0, 200)}...
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">İptal</Button>
+            </DialogClose>
+            <Button 
+              onClick={handlePdfUpload}
+              disabled={!pdfFormData.pdf}
+              className="flex items-center gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              PDF'den Ürün Ekle
             </Button>
           </DialogFooter>
         </DialogContent>

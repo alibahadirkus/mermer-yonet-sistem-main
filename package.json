@@ -13,7 +13,9 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
-    "docker:restart": "docker-compose restart"
+    "docker:restart": "docker-compose restart",
+    "pdf-to-jpg": "node scripts/pdf-to-jpg.cjs",
+    "pdf-to-jpg-simple": "node scripts/pdf-to-jpg-simple.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -63,6 +65,9 @@
     "multer": "^1.4.5-lts.2",
     "mysql2": "^3.14.1",
     "next-themes": "^0.3.0",
+    "pdf-parse": "^1.1.1",
+    "pdf-poppler": "^0.2.1",
+    "pdf2pic": "^3.2.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",

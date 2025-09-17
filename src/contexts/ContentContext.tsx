@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Product, News, Category, TeamMember, getProducts, addProduct, updateProduct, deleteProduct, getNews, addNews, updateNews, deleteNews, getReferences, addReference, updateReference, deleteReference, getCategories, addCategory, updateCategory, deleteCategory, getTeamMembers, addTeamMember, updateTeamMember, deleteTeamMember } from '../services/api';
+import { Product, News, Category, TeamMember, getProducts, addProduct, updateProduct, deleteProduct, addProductsFromPdf, getNews, addNews, updateNews, deleteNews, getReferences, addReference, updateReference, deleteReference, getCategories, addCategory, updateCategory, deleteCategory, getTeamMembers, addTeamMember, updateTeamMember, deleteTeamMember } from '../services/api';
 
 // Types
 export interface CompanyInfo {
@@ -47,6 +47,7 @@ interface ContentContextType {
   addProduct: (formData: FormData) => Promise<void>;
   updateProduct: (id: number, formData: FormData) => Promise<void>;
   deleteProduct: (id: number) => Promise<void>;
+  addProductsFromPdf: (formData: FormData) => Promise<{message: string, products: Product[], extractedText: string}>;
   addApplication: (application: Omit<Application, 'id'>) => void;
   updateApplication: (id: string, updates: Partial<Application>) => void;
   deleteApplication: (id: string) => void;
@@ -226,6 +227,23 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       });
     } catch (err) {
       setError('Ürün silinirken bir hata oluştu');
+      throw err;
+    }
+  };
+
+  const handleAddProductsFromPdf = async (formData: FormData) => {
+    try {
+      const result = await addProductsFromPdf(formData);
+      setProducts(prev => [...prev, ...result.products]);
+      
+      toast({
+        title: 'Başarılı',
+        description: result.message,
+      });
+      
+      return result;
+    } catch (err) {
+      setError('PDF\'den ürün eklenirken bir hata oluştu');
       throw err;
     }
   };
@@ -488,6 +506,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     addProduct: handleAddProduct,
     updateProduct: handleUpdateProduct,
     deleteProduct: handleDeleteProduct,
+    addProductsFromPdf: handleAddProductsFromPdf,
     addApplication: (application: Omit<Application, 'id'>) => {
       const newApplication = { ...application, id: Date.now().toString() };
       setApplications(prev => {
