@@ -22,6 +22,7 @@ const News = () => {
     imageFile: null as File | null,
     videoFile: null as File | null,
     videoLink: '',
+    customDate: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,6 +42,9 @@ const News = () => {
       }
       if (formData.videoLink) {
         formDataToSend.append('video_link', formData.videoLink);
+      }
+      if (formData.customDate) {
+        formDataToSend.append('custom_date', formData.customDate);
       }
 
       if (editingNews) {
@@ -77,6 +81,7 @@ const News = () => {
       imageFile: null,
       videoFile: null,
       videoLink: news.video_link || '',
+      customDate: news.created_at ? new Date(news.created_at).toISOString().split('T')[0] : '',
     });
     setIsDialogOpen(true);
   };
@@ -107,6 +112,7 @@ const News = () => {
       imageFile: null,
       videoFile: null,
       videoLink: '',
+      customDate: '',
     });
     setEditingNews(null);
   };
@@ -184,6 +190,18 @@ const News = () => {
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     YouTube, Vimeo veya diğer video platformlarından link yapıştırın
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Haber Tarihi</label>
+                  <Input
+                    type="date"
+                    value={formData.customDate}
+                    onChange={(e) => setFormData({ ...formData, customDate: e.target.value })}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Boş bırakırsanız şu anki tarih kullanılır
                   </p>
                 </div>
                 <Button type="submit" className="w-full">
