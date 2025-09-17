@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import Navigation from './Navigation';
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useContent } from "@/contexts/ContentContext";
+import { Menu, X } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,10 +13,21 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { companyInfo, isAdmin, setIsAdmin } = useContent();
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  const menuItems = [
+    { href: '/', label: 'Ana Sayfa' },
+    { href: '/products', label: 'Ürünlerimiz' },
+    { href: '/about', label: 'Hakkımızda' },
+    { href: '/team', label: 'Ekibimiz' },
+    { href: '/references', label: 'Referanslarımız' },
+    { href: '/news', label: 'Haberler' },
+    { href: '/contact', label: 'İletişim' },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -33,32 +45,49 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Link>
           
           <nav className="hidden md:flex space-x-6">
-            <Link to="/" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Ana Sayfa
-            </Link>
-            <Link to="/products" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/products') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Ürünlerimiz
-            </Link>
-            <Link to="/about" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/about') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Hakkımızda
-            </Link>
-            <Link to="/team" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/team') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Ekibimiz
-            </Link>
-            <Link to="/references" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/references') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Referanslarımız
-            </Link>
-            <Link to="/news" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/news') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              Haberler
-            </Link>
-            <Link to="/contact" className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive('/contact') ? 'font-semibold border-b-2 border-gold-500' : ''}`}>
-              İletişim
-            </Link>
+            {menuItems.map((item) => (
+              <Link 
+                key={item.href}
+                to={item.href} 
+                className={`text-marble-800 hover:text-gold-600 transition-colors ${isActive(item.href) ? 'font-semibold border-b-2 border-gold-500' : ''}`}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
           
           <div className="flex items-center space-x-4">
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
         </div>
+        
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-marble-100 shadow-lg">
+            <div className="container mx-auto px-4 py-4">
+              <nav className="flex flex-col space-y-4">
+                {menuItems.map((item) => (
+                  <Link 
+                    key={item.href}
+                    to={item.href} 
+                    className={`text-marble-800 hover:text-gold-600 transition-colors py-2 px-4 rounded-md ${isActive(item.href) ? 'bg-gold-50 font-semibold text-gold-600' : 'hover:bg-gray-50'}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </div>
+        )}
       </header>
       
       <main className="flex-grow">

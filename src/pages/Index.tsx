@@ -29,20 +29,20 @@ const Index = () => {
         </div>
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-xl animate-fadeIn">
-            <h1 className="text-4xl md:text-6xl font-elegant text-white font-bold leading-tight mb-6 drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-elegant text-white font-bold leading-tight mb-6 drop-shadow-lg">
               Mekanlara Zamansız Zarafet Katıyoruz
             </h1>
-            <p className="text-xl text-white/90 mb-8 drop-shadow-md">
+            <p className="text-lg sm:text-xl text-white/90 mb-8 drop-shadow-md">
               Lüks evler ve mekanlar için premium mermer çözümleri
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/products">
-                <Button className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-6 rounded-md">
+                <Button className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-4 sm:px-8 sm:py-6 rounded-md w-full sm:w-auto">
                   Koleksiyonumuzu Keşfedin
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white hover:bg-white/20 text-white px-8 py-6 rounded-md">
+                <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white hover:bg-white/20 text-white px-6 py-4 sm:px-8 sm:py-6 rounded-md w-full sm:w-auto">
                   Bize Ulaşın
                 </Button>
               </Link>
@@ -54,7 +54,7 @@ const Index = () => {
       {/* Carousel Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-elegant font-bold text-center mb-10 marble-border pb-4">
+          <h2 className="text-2xl sm:text-3xl font-elegant font-bold text-center mb-10 marble-border pb-4">
             Premium Mermer Koleksiyonumuz
           </h2>
           
@@ -107,7 +107,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="md:w-1/2 mb-8 md:mb-0">
-              <h2 className="text-3xl font-elegant font-bold mb-6 marble-border pb-4">{companyInfo.name} Hakkında</h2>
+              <h2 className="text-2xl sm:text-3xl font-elegant font-bold mb-6 marble-border pb-4">{companyInfo.name} Hakkında</h2>
               <p className="text-marble-800 mb-6 leading-relaxed">
                 {companyInfo.aboutText}
               </p>
@@ -132,7 +132,7 @@ const Index = () => {
       {/* Featured Products Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-elegant font-bold text-center mb-12 marble-border pb-4">
+          <h2 className="text-2xl sm:text-3xl font-elegant font-bold text-center mb-12 marble-border pb-4">
             Öne Çıkan Koleksiyonlarımız
           </h2>
           
