@@ -64,8 +64,8 @@ const Index = () => {
                 <div className="p-1">
                   <div className="overflow-hidden rounded-xl">
                     <img 
-  src="/images/acmaden3.jpeg"                     alt="lola White" 
-  alt="Luxury Marble" 
+                      src="/images/acmaden3.jpeg" 
+                      alt="Luxury Marble" 
                       className="w-full aspect-video object-cover"
                     />
                   </div>
