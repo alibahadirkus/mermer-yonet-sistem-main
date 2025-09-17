@@ -34,11 +34,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="bg-white border-b border-marble-100 sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="h-10 w-10 flex items-center justify-center">
+            <div className="h-10 w-10 flex items-center justify-center bg-marble-600 rounded-lg">
               <img 
-                src="/alibahadir-uploads/ae66d9f3-34f6-4152-babb-d29ecf4dd8f4.png" 
+                src="/alibahadir/ae66d9f3-34f6-4152-babb-d29ecf4dd8f4.png" 
                 alt="AC Madencilik Logo" 
-                className="h-10 w-auto"
+                className="h-8 w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<span class="text-white font-bold text-lg">AC</span>';
+                  }
+                }}
               />
             </div>
             <h1 className="text-xl font-elegant font-bold tracking-wide text-marble-950">{companyInfo.name}</h1>
