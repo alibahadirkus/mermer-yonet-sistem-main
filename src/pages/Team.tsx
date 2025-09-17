@@ -45,23 +45,25 @@ const Team = () => {
       },
       depots: [
         {
-          name: "Bursa dep. Müd.",
-          position: bursaDepot.find(m => m.position.includes('Müd.'))?.name || "Veri Yok",
+          name: "Bursa Depo",
+          position: "Departman",
           icon: <MapPin className="w-5 h-5 text-gray-500" />,
-          children: bursaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
+          children: bursaDepot.map(member => ({
             name: member.position,
             position: member.name,
-            icon: <Users className="w-4 h-4 text-gray-500" />
+            icon: <Users className="w-4 h-4 text-gray-500" />,
+            isManager: member.position.includes('Müd.')
           }))
         },
         {
-          name: "Bandırma dep. Müd.",
-          position: bandirmaDepot.find(m => m.position.includes('Müd.'))?.name || "Veri Yok",
+          name: "Bandırma Depo",
+          position: "Departman",
           icon: <MapPin className="w-5 h-5 text-gray-500" />,
-          children: bandirmaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
+          children: bandirmaDepot.map(member => ({
             name: member.position,
             position: member.name,
-            icon: <Users className="w-4 h-4 text-gray-500" />
+            icon: <Users className="w-4 h-4 text-gray-500" />,
+            isManager: member.position.includes('Müd.')
           }))
         }
       ],
@@ -69,7 +71,7 @@ const Team = () => {
         name: "İhracat Departmanı",
         position: exportDept.find(m => m.position.includes('Departmanı'))?.name || "Veri Yok",
         icon: <Briefcase className="w-5 h-5 text-gray-500" />,
-        children: exportDept.filter(m => !m.position.includes('Departmanı')).map(member => ({
+        children: exportDept.map(member => ({
           name: member.position,
           position: member.name,
           icon: <Users className="w-4 h-4 text-gray-500" />
@@ -183,11 +185,18 @@ const Team = () => {
           </Card>
           <div className="flex flex-wrap justify-center gap-2">
             {depot.children && depot.children.map((child) => (
-              <Card key={child.position} className="w-40 bg-white border border-gray-200 mb-2">
+              <Card key={child.position} className={`w-40 mb-2 ${child.isManager ? 'bg-gold-50 border-gold-300' : 'bg-white border-gray-200'}`}>
                 <CardContent className="p-2 text-center">
                   <div className="flex justify-center mb-1">{child.icon}</div>
-                  <h4 className={`font-semibold ${child.icon?.props?.className?.includes('text-red-700') ? 'text-marble-800' : 'text-marble-700'}`}>{child.name}</h4>
-                  <p className="text-xs text-marble-600">{child.position}</p>
+                  <h4 className={`font-semibold ${child.isManager ? 'text-gold-800' : 'text-marble-700'}`}>{child.name}</h4>
+                  <p className={`text-xs ${child.isManager ? 'text-gold-600' : 'text-marble-600'}`}>{child.position}</p>
+                  {child.isManager && (
+                    <div className="mt-1">
+                      <span className="inline-block px-2 py-1 text-xs bg-gold-200 text-gold-800 rounded-full">
+                        Müdür
+                      </span>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
