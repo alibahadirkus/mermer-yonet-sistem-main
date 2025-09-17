@@ -5,7 +5,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import pdf from 'pdf-parse';
+// import pdf from 'pdf-parse'; // Bu modül sorunlu, kaldırıldı
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -415,12 +415,12 @@ async function convertPdfToImages(pdfPath, outputDir) {
   }
 }
 
-// PDF'den metin çıkarma fonksiyonu
+// PDF'den metin çıkarma fonksiyonu (geçici olarak devre dışı)
 async function extractTextFromPdf(pdfPath) {
   try {
-    const dataBuffer = fs.readFileSync(pdfPath);
-    const data = await pdf(dataBuffer);
-    return data.text;
+    // Geçici olarak boş string döndür
+    console.log('PDF metin çıkarma geçici olarak devre dışı');
+    return '';
   } catch (error) {
     console.error('PDF metin çıkarma hatası:', error);
     throw error;
