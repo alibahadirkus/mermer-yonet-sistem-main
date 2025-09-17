@@ -63,6 +63,7 @@ const Products = () => {
     console.log('Image clicked:', imagePath, productName);
     setSelectedImage(imagePath);
     setImageTitle(productName);
+    console.log('State updated - selectedImage:', imagePath, 'imageTitle:', productName);
   };
 
   // Handle initial load animation
