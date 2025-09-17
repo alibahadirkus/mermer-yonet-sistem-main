@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from '@/components/ui/use-toast';
 import PDFViewer from "@/components/PDFViewer";
+import ImageModal from "@/components/ImageModal";
 
 const Products = () => {
   const { products, categories } = useContent();
@@ -28,6 +29,8 @@ const Products = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedPDF, setSelectedPDF] = useState<string | null>(null);
   const [pdfTitle, setPdfTitle] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageTitle, setImageTitle] = useState<string>("");
   
   // Get categories for filter
   const categoryOptions = ["all", ...categories.map(cat => cat.name)];
@@ -54,6 +57,11 @@ const Products = () => {
   const handlePDFView = (pdfPath: string, productName: string) => {
     setSelectedPDF(pdfPath);
     setPdfTitle(productName);
+  };
+
+  const handleImageClick = (imagePath: string, productName: string) => {
+    setSelectedImage(imagePath);
+    setImageTitle(productName);
   };
 
   // Handle initial load animation
@@ -299,7 +307,7 @@ const Products = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {categoryProducts.map((product) => (
                       <Card key={product.id} className="overflow-hidden group hover:shadow-lg transition-all duration-300">
-                        <div className="relative h-64 overflow-hidden">
+                        <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => handleImageClick(product.image_path, product.name)}>
                           <img
                             src={product.image_path}
                             alt={product.name}
@@ -310,15 +318,30 @@ const Products = () => {
                             }}
                           />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleImageClick(product.image_path, product.name);
+                              }}
+                              className="flex items-center gap-2"
+                            >
+                              <Eye className="h-4 w-4" />
+                              Büyüt
+                            </Button>
                             {product.pdf_path && (
                               <Button
                                 size="sm"
                                 variant="secondary"
-                                onClick={() => handlePDFView(product.pdf_path!, product.name)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePDFView(product.pdf_path!, product.name);
+                                }}
                                 className="flex items-center gap-2"
                               >
                                 <FileText className="h-4 w-4" />
-                                PDF Görüntüle
+                                PDF
                               </Button>
                             )}
                           </div>
@@ -355,6 +378,16 @@ const Products = () => {
           isOpen={!!selectedPDF}
           onClose={() => setSelectedPDF(null)}
           title={pdfTitle}
+        />
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <ImageModal
+          isOpen={!!selectedImage}
+          onClose={() => setSelectedImage(null)}
+          imageUrl={selectedImage}
+          title={imageTitle}
         />
       )}
     </Layout>
