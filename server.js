@@ -46,22 +46,29 @@ app.use('/src', express.static('public'));
 // Frontend static dosyalarını serve et
 app.use(express.static('dist'));
 
-// MySQL bağlantısı
-const db = mysql.createConnection({
+// MySQL bağlantısı - Connection pooling ile
+const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.DB_NAME || 'websitedb',
-  charset: 'utf8mb4'
+  charset: 'utf8mb4',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true
 });
 
 // Database connection test
-db.connect((err) => {
+db.getConnection((err, connection) => {
   if (err) {
     console.error('MySQL bağlantı hatası:', err);
     return;
   }
   console.log('MySQL veritabanına bağlandı');
+  connection.release();
 });
 
 // Resim ve PDF yükleme için multer yapılandırması

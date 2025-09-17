@@ -16,6 +16,10 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     networks:
       - mermer_network
 
@@ -37,7 +41,8 @@ services:
     volumes:
       - ./public:/app/public
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - mermer_network
 
