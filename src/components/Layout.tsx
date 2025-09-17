@@ -58,14 +58,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           
           <div className="flex items-center space-x-4">
             {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            <button
+              className="md:hidden p-2 text-marble-800 hover:text-gold-600 hover:bg-gray-100 rounded-md transition-colors flex items-center justify-center"
+              onClick={() => {
+                console.log('Menu button clicked, current state:', isMobileMenuOpen);
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
+            </button>
           </div>
         </div>
       </header>
