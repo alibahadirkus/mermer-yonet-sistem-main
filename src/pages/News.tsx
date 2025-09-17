@@ -10,6 +10,9 @@ const News = () => {
   const { companyInfo, news } = useContent();
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
+  // Debug: News verilerini konsola yazdır
+  console.log('News data:', news);
+
   const handleImageError = (id: string) => {
     setImageErrors(prev => ({ ...prev, [id]: true }));
   };
@@ -33,12 +36,21 @@ const News = () => {
             {news.map((item) => (
               <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
                 <div className="h-64 overflow-hidden relative">
+                  {(() => {
+                    console.log('Rendering news item:', item.id, 'video_path:', item.video_path, 'video_link:', item.video_link);
+                    return null;
+                  })()}
                   {item.video_path ? (
-                    <VideoPlayer 
-                      src={item.video_path} 
-                      title={item.title}
-                      className="w-full h-full"
-                    />
+                    <div className="w-full h-full bg-black flex items-center justify-center">
+                      <video 
+                        src={item.video_path} 
+                        controls 
+                        className="w-full h-full"
+                        style={{ maxHeight: '100%' }}
+                      >
+                        Tarayıcınız video etiketini desteklemiyor.
+                      </video>
+                    </div>
                   ) : item.video_link && isVideoLink(item.video_link) ? (
                     <div className="w-full h-full relative">
                       <iframe
