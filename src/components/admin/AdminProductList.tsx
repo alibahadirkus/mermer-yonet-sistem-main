@@ -60,7 +60,7 @@ const AdminProductList = () => {
       pdf: null
     });
   };
-
+  
   const handleAddProduct = async () => {
     try {
       const data = new FormData();
@@ -194,7 +194,7 @@ const AdminProductList = () => {
     setDeletingProduct(product);
     setIsDeleteDialogOpen(true);
   };
-
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -277,7 +277,7 @@ const AdminProductList = () => {
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash className="h-4 w-4" />
-                    </Button>
+            </Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -289,22 +289,22 @@ const AdminProductList = () => {
       {/* Add Product Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="max-w-2xl">
-          <DialogHeader>
+            <DialogHeader>
             <DialogTitle>Yeni Ürün Ekle</DialogTitle>
-          </DialogHeader>
-          
+            </DialogHeader>
+            
           <div className="space-y-4">
-            <div>
+              <div>
               <Label htmlFor="name">Ürün Adı</Label>
-              <Input
-                id="name"
+                <Input
+                  id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 placeholder="Ürün adını girin"
-              />
-            </div>
-            
-            <div>
+                />
+              </div>
+              
+              <div>
               <Label htmlFor="category">Kategori</Label>
               <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
                 <SelectTrigger>
@@ -319,29 +319,29 @@ const AdminProductList = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            
-            <div>
+              </div>
+              
+              <div>
               <Label htmlFor="description">Açıklama</Label>
-              <Textarea
-                id="description"
+                <Textarea
+                  id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 placeholder="Ürün açıklamasını girin"
-                className="min-h-24"
-              />
-            </div>
-            
-            <div>
+                  className="min-h-24"
+                />
+              </div>
+              
+              <div>
               <Label htmlFor="image">Ürün Resmi</Label>
-              <Input
-                id="image"
+                <Input
+                  id="image"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFormData({...formData, image: e.target.files?.[0] || null})}
-              />
-            </div>
-            
+                />
+              </div>
+              
             <div>
               <Label htmlFor="pdf">PDF Dosyası (Opsiyonel)</Label>
               <Input
@@ -351,41 +351,41 @@ const AdminProductList = () => {
                 onChange={(e) => setFormData({...formData, pdf: e.target.files?.[0] || null})}
               />
             </div>
-          </div>
-          
-          <DialogFooter>
-            <DialogClose asChild>
+            </div>
+            
+            <DialogFooter>
+              <DialogClose asChild>
               <Button variant="outline">İptal</Button>
-            </DialogClose>
-            <Button 
-              onClick={handleAddProduct}
+              </DialogClose>
+              <Button 
+                onClick={handleAddProduct}
               disabled={!formData.name || !formData.category || !formData.image}
-            >
+              >
               Ürün Ekle
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
       {/* Edit Product Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
-          <DialogHeader>
+                          <DialogHeader>
             <DialogTitle>Ürün Düzenle</DialogTitle>
-          </DialogHeader>
-          
+                          </DialogHeader>
+                          
           <div className="space-y-4">
-            <div>
+                              <div>
               <Label htmlFor="edit-name">Ürün Adı</Label>
-              <Input
-                id="edit-name"
+                                <Input
+                                  id="edit-name"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 placeholder="Ürün adını girin"
-              />
-            </div>
-            
-            <div>
+                                />
+                              </div>
+                              
+                              <div>
               <Label htmlFor="edit-category">Kategori</Label>
               <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
                 <SelectTrigger>
@@ -400,34 +400,34 @@ const AdminProductList = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            
-            <div>
+                              </div>
+                              
+                              <div>
               <Label htmlFor="edit-description">Açıklama</Label>
-              <Textarea
-                id="edit-description"
+                                <Textarea
+                                  id="edit-description"
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 placeholder="Ürün açıklamasını girin"
-                className="min-h-24"
-              />
-            </div>
-            
-            <div>
+                                  className="min-h-24"
+                                />
+                              </div>
+                              
+                              <div>
               <Label htmlFor="edit-image">Yeni Ürün Resmi (Opsiyonel)</Label>
-              <Input
-                id="edit-image"
+                                <Input
+                                  id="edit-image"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFormData({...formData, image: e.target.files?.[0] || null})}
-              />
+                                />
               {editingProduct?.image_path && (
                 <p className="text-sm text-gray-500 mt-1">
                   Mevcut resim: {editingProduct.image_path}
                 </p>
               )}
-            </div>
-            
+                              </div>
+                              
             <div>
               <Label htmlFor="edit-pdf">Yeni PDF Dosyası (Opsiyonel)</Label>
               <Input
@@ -441,48 +441,48 @@ const AdminProductList = () => {
                   Mevcut PDF: {editingProduct.pdf_path}
                 </p>
               )}
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <DialogClose asChild>
+                              </div>
+                            </div>
+                          
+                          <DialogFooter>
+                            <DialogClose asChild>
               <Button variant="outline">İptal</Button>
-            </DialogClose>
+                            </DialogClose>
             <Button 
               onClick={handleEditProduct}
               disabled={!formData.name || !formData.category}
             >
               Güncelle
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                      
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
+                        <DialogContent>
+                          <DialogHeader>
             <DialogTitle>Ürünü Sil</DialogTitle>
-          </DialogHeader>
+                          </DialogHeader>
           
           <p>
             "{deletingProduct?.name}" ürününü silmek istediğinizden emin misiniz? 
             Bu işlem geri alınamaz.
           </p>
           
-          <DialogFooter>
-            <DialogClose asChild>
+                          <DialogFooter>
+                            <DialogClose asChild>
               <Button variant="outline">İptal</Button>
-            </DialogClose>
-            <Button 
+                            </DialogClose>
+                            <Button 
               onClick={handleDeleteProduct}
-              variant="destructive"
-            >
+                              variant="destructive" 
+                            >
               Sil
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
 
       {/* PDF Upload Dialog */}
       <Dialog open={isPdfDialogOpen} onOpenChange={(open) => {
@@ -507,7 +507,7 @@ const AdminProductList = () => {
               <p className="text-sm text-gray-500 mt-1">
                 PDF dosyası her sayfa için ayrı bir ürün oluşturacaktır.
               </p>
-            </div>
+                    </div>
 
             <div>
               <Label htmlFor="pdf-category">Kategori</Label>
@@ -539,8 +539,8 @@ const AdminProductList = () => {
                     {pdfResult.extractedText.substring(0, 200)}...
                   </p>
                 </div>
-              </div>
-            )}
+        </div>
+      )}
           </div>
           
           <DialogFooter>
