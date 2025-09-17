@@ -7,6 +7,9 @@ import { useContent } from '@/contexts/ContentContext';
 const Team = () => {
   const { teamMembers } = useContent();
   
+  console.log('Team component - teamMembers:', teamMembers);
+  console.log('Team members length:', teamMembers.length);
+  
   // API'den gelen veriyi organize et
   const organizeTeamData = () => {
     const founders = teamMembers.filter(member => member.department === 'Kurucular');
@@ -67,6 +70,34 @@ const Team = () => {
   };
 
   const organization = organizeTeamData();
+
+  // Eğer veritabanından veri gelmiyorsa, fallback veri göster
+  if (teamMembers.length === 0) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-elegant font-bold text-center mb-8 marble-border pb-4">
+            Organizasyon Şeması
+          </h1>
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center bg-gray-100 rounded-full">
+                <Users className="h-10 w-10 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Ekip verisi bulunamadı</h3>
+              <p className="text-gray-500 mb-6">Veritabanında ekip üyesi verisi bulunmuyor. Admin panelinden ekip üyelerini ekleyebilirsiniz.</p>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>Not:</strong> Bu sayfa veritabanından ekip üyesi verilerini çekiyor. 
+                  Eğer veri görünmüyorsa, admin panelinden ekip üyelerini eklemeniz gerekiyor.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   const renderNode = (node: any, level: number = 0) => {
     const isTopLevel = level === 0;
