@@ -81,7 +81,7 @@ const defaultCompanyInfo: CompanyInfo = {
   aboutText: "AC Madencilik, 2008 yılında kurulan mermer sektöründeki öncü şirketlerden biridir. Yıllar boyunca kazandığı deneyim ve modern teknolojilerle birlikte sektörde öne çıkmıştır.",
   mission: "Mekanları zamansız sanat eserlerine dönüştüren olağanüstü mermer ürünleri sunmak.",
   vision: "Mermer mükemmelliği ve yeniliği için küresel standart olmak.",
-  address: "Bandırma, Balıkesir",
+  address: "Kuşcenneti, Balıkesir Asfaltı 18.km, 10245 Bandırma/Balıkesir",
   phone: "+90 266 715 42 80",
   email: "info@acmadencilik.com.tr"
 };
