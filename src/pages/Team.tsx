@@ -30,14 +30,14 @@ const Team = () => {
         }))
       },
       finance: {
-        name: finance[0]?.position || "Finans Müd. & İdari İşler Müd.",
-        position: finance[0]?.name || "Mert GÜLTEN",
+        name: finance[0]?.position || "Finans Departmanı",
+        position: finance[0]?.name || "Veri Yok",
         icon: <UserCircle className="w-5 h-5 text-gray-500" />
       },
       depots: [
         {
           name: "Bursa dep. Müd.",
-          position: bursaDepot.find(m => m.position.includes('Müd.'))?.name || "Tolga YEŞİLDAĞ",
+          position: bursaDepot.find(m => m.position.includes('Müd.'))?.name || "Veri Yok",
           icon: <MapPin className="w-5 h-5 text-gray-500" />,
           children: bursaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
             name: member.position,
@@ -47,7 +47,7 @@ const Team = () => {
         },
         {
           name: "Bandırma dep. Müd.",
-          position: bandirmaDepot.find(m => m.position.includes('Müd.'))?.name || "Okan KARAKAHYA",
+          position: bandirmaDepot.find(m => m.position.includes('Müd.'))?.name || "Veri Yok",
           icon: <MapPin className="w-5 h-5 text-gray-500" />,
           children: bandirmaDepot.filter(m => !m.position.includes('Müd.')).map(member => ({
             name: member.position,
@@ -58,7 +58,7 @@ const Team = () => {
       ],
       export: {
         name: "İhracat Departmanı",
-        position: exportDept.find(m => m.position.includes('Departmanı'))?.name || "İ.Furkan ZORLAR",
+        position: exportDept.find(m => m.position.includes('Departmanı'))?.name || "Veri Yok",
         icon: <Briefcase className="w-5 h-5 text-gray-500" />,
         children: exportDept.filter(m => !m.position.includes('Departmanı')).map(member => ({
           name: member.position,
@@ -163,7 +163,7 @@ const Team = () => {
   // Render logic for new structure
   const renderDepots = () => (
     <div className="flex flex-wrap justify-center gap-12 mt-8">
-      {organization.depots.map((depot) => (
+      {organization.depots.filter(depot => depot.position !== "Veri Yok").map((depot) => (
         <div key={depot.name} className="flex flex-col items-center">
           <Card className="w-56 bg-white border border-gray-200 mb-2">
             <CardContent className="p-3 text-center">
@@ -212,35 +212,39 @@ const Team = () => {
               </Card>
             ))}
           </div>
-          <Card className="w-72 bg-white border border-gray-200 mb-4">
-            <CardContent className="p-2 text-center">
-              <div className="flex justify-center mb-1">{organization.finance.icon}</div>
-              <h4 className="font-bold text-marble-900">{organization.finance.name}</h4>
-              <p className="text-xs text-marble-800">{organization.finance.position}</p>
-            </CardContent>
-          </Card>
+          {organization.finance.position !== "Veri Yok" && (
+            <Card className="w-72 bg-white border border-gray-200 mb-4">
+              <CardContent className="p-2 text-center">
+                <div className="flex justify-center mb-1">{organization.finance.icon}</div>
+                <h4 className="font-bold text-marble-900">{organization.finance.name}</h4>
+                <p className="text-xs text-marble-800">{organization.finance.position}</p>
+              </CardContent>
+            </Card>
+          )}
         </div>
         {renderDepots()}
-        <div className="flex flex-col items-center mt-8">
-          <Card className="w-72 bg-red-200 border-red-400 border-2 mb-2">
-            <CardContent className="p-2 text-center">
-              <div className="flex justify-center mb-1">{organization.export.icon}</div>
-              <h4 className="font-bold text-red-700">{organization.export.name}</h4>
-              <p className="text-xs text-red-700">{organization.export.position}</p>
-            </CardContent>
-          </Card>
-          <div className="flex flex-wrap justify-center gap-2">
-            {organization.export.children && organization.export.children.map((child) => (
-              <Card key={child.position} className="w-40 bg-white border border-gray-200 mb-2">
-                <CardContent className="p-2 text-center">
-                  <div className="flex justify-center mb-1">{child.icon}</div>
-                  <h4 className="font-semibold text-gray-700">{child.name}</h4>
-                  <p className="text-xs text-gray-500">{child.position}</p>
-                </CardContent>
-              </Card>
-            ))}
+        {organization.export.position !== "Veri Yok" && (
+          <div className="flex flex-col items-center mt-8">
+            <Card className="w-72 bg-red-200 border-red-400 border-2 mb-2">
+              <CardContent className="p-2 text-center">
+                <div className="flex justify-center mb-1">{organization.export.icon}</div>
+                <h4 className="font-bold text-red-700">{organization.export.name}</h4>
+                <p className="text-xs text-red-700">{organization.export.position}</p>
+              </CardContent>
+            </Card>
+            <div className="flex flex-wrap justify-center gap-2">
+              {organization.export.children && organization.export.children.map((child) => (
+                <Card key={child.position} className="w-40 bg-white border border-gray-200 mb-2">
+                  <CardContent className="p-2 text-center">
+                    <div className="flex justify-center mb-1">{child.icon}</div>
+                    <h4 className="font-semibold text-gray-700">{child.name}</h4>
+                    <p className="text-xs text-gray-500">{child.position}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
