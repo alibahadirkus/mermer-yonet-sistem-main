@@ -68,27 +68,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Button>
           </div>
         </div>
-        
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-marble-100 shadow-lg">
-            <div className="container mx-auto px-4 py-4">
-              <nav className="flex flex-col space-y-4">
-                {menuItems.map((item) => (
-                  <Link 
-                    key={item.href}
-                    to={item.href} 
-                    className={`text-marble-800 hover:text-gold-600 transition-colors py-2 px-4 rounded-md ${isActive(item.href) ? 'bg-gold-50 font-semibold text-gold-600' : 'hover:bg-gray-50'}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </div>
-        )}
       </header>
+      
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-b border-marble-100 shadow-lg z-20">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="flex flex-col space-y-4">
+              {menuItems.map((item) => (
+                <Link 
+                  key={item.href}
+                  to={item.href} 
+                  className={`text-marble-800 hover:text-gold-600 transition-colors py-2 px-4 rounded-md ${isActive(item.href) ? 'bg-gold-50 font-semibold text-gold-600' : 'hover:bg-gray-50'}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
       
       <main className="flex-grow">
         {children}
