@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useContent } from "@/contexts/ContentContext";
 import { Button } from "@/components/ui/button";
 import { 
@@ -50,6 +50,9 @@ const AdminProductList = () => {
   });
 
   // Categories are now loaded from the context
+  useEffect(() => {
+    console.log('Categories updated in AdminProductList:', categories);
+  }, [categories]);
 
   const resetForm = () => {
     setFormData({
@@ -312,11 +315,17 @@ const AdminProductList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Kategori seçin</SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.name}>
-                      {cat.name}
+                  {categories && categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="loading" disabled>
+                      Kategoriler yükleniyor...
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectContent>
               </Select>
               </div>
@@ -520,11 +529,17 @@ const AdminProductList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Kategori seçin</SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.name}>
-                      {cat.name}
+                  {categories && categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="loading" disabled>
+                      Kategoriler yükleniyor...
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectContent>
               </Select>
             </div>

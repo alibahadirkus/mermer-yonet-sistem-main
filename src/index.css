@@ -143,3 +143,106 @@
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
 }
+
+/* Video quality optimizations */
+video {
+  image-rendering: high-quality;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Video lively effects */
+.video-lively {
+  filter: 
+    brightness(1.1) 
+    contrast(1.15) 
+    saturate(1.2) 
+    hue-rotate(5deg)
+    drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+  transition: filter 0.3s ease;
+}
+
+.video-lively:hover {
+  filter: 
+    brightness(1.15) 
+    contrast(1.2) 
+    saturate(1.3) 
+    hue-rotate(8deg)
+    drop-shadow(0 0 25px rgba(0, 0, 0, 0.4));
+}
+
+/* Video subtle animation for liveliness */
+@keyframes videoPulse {
+  0%, 100% {
+    filter: 
+      brightness(1.1) 
+      contrast(1.15) 
+      saturate(1.2) 
+      hue-rotate(5deg)
+      drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+  }
+  50% {
+    filter: 
+      brightness(1.12) 
+      contrast(1.18) 
+      saturate(1.25) 
+      hue-rotate(6deg)
+      drop-shadow(0 0 22px rgba(0, 0, 0, 0.35));
+  }
+}
+
+.video-lively {
+  animation: videoPulse 8s ease-in-out infinite;
+}
+
+/* Smooth video playback */
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+
+video::-webkit-media-controls-timeline {
+  display: none !important;
+}
+
+video::-webkit-media-controls-current-time-display {
+  display: none !important;
+}
+
+video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+}
+
+video::-webkit-media-controls-timeline-container {
+  display: none !important;
+}
+
+video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+video::-webkit-media-controls-rewind-button {
+  display: none !important;
+}
+
+video::-webkit-media-controls-return-to-realtime-button {
+  display: none !important;
+}
+
+video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none !important;
+}

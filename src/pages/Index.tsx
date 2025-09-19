@@ -19,13 +19,18 @@ const Index = () => {
             autoPlay 
             muted 
             loop 
-            className="w-full h-full object-cover"
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover video-lively"
+            style={{
+              imageRendering: 'crisp-edges'
+            }}
             poster="https://images.unsplash.com/photo-1589833870464-a77ee1183f65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
           >
             <source src="/videos/video.mp4" type="video/mp4" />
             Tarayıcınız video etiketini desteklemiyor.
           </video>
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/40 to-black/60"></div>
         </div>
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-xl animate-fadeIn">
@@ -57,6 +62,31 @@ const Index = () => {
           <h2 className="text-2xl sm:text-3xl font-elegant font-bold text-center mb-10 marble-border pb-4">
             Premium Mermer Koleksiyonumuz
           </h2>
+          
+          {/* Featured Marble Image */}
+          <div className="mb-12">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl group">
+              <img 
+                src="/images/Coante-Tezgah-3.jpg" 
+                alt="Premium Mermer Koleksiyonu - Coante Tezgah" 
+                className="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6">
+                <h3 className="text-2xl font-elegant font-bold text-white mb-2 drop-shadow-lg">
+                  Doğanın Zarafetini Mekanlarınıza Taşıyan Eşsiz Mermer Çözümlerimizi Keşfedin
+                </h3>
+                <p className="text-white/90 text-lg drop-shadow-md mb-4">
+                  Premium kalitede mermer koleksiyonumuz ile mekanlarınızı dönüştürün
+                </p>
+                <Link to="/products">
+                  <Button className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    Tüm Ürünleri Keşfet
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
           
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>

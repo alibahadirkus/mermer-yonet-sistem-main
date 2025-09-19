@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const AdminProducts = () => {
-  const { products, addProduct, updateProduct, deleteProduct } = useContent();
+  const { products, categories, addProduct, updateProduct, deleteProduct } = useContent();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -222,13 +222,17 @@ const AdminProducts = () => {
                       <SelectValue placeholder="Kategori seçin" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="COANTE">COANTE</SelectItem>
-                      <SelectItem value="DOLOMİT">DOLOMİT</SelectItem>
-                      <SelectItem value="BEJLER">BEJLER</SelectItem>
-                      <SelectItem value="NG STONE">NG STONE</SelectItem>
-                      <SelectItem value="TRAVERTEN">TRAVERTEN</SelectItem>
-                      <SelectItem value="MERMER">MERMER</SelectItem>
-                      <SelectItem value="YERLİ GRANİT">YERLİ GRANİT</SelectItem>
+                      {categories && categories.length > 0 ? (
+                        categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.name}>
+                            {cat.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="loading" disabled>
+                          Kategoriler yükleniyor...
+                        </SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
