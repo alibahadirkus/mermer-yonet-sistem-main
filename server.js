@@ -564,7 +564,7 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 
 // HTTP server
 const httpServer = http.createServer(app);

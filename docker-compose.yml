@@ -38,7 +38,7 @@ services:
       DB_NAME: websitedb
     ports:
       - "80:3000"
-      - "443:3443"  # HTTPS için
+      - "443:443"  # HTTPS için (dışarıya 443, içeriye 443)
     volumes:
       - ./public:/app/public
       - ./ssl:/app/ssl  # SSL sertifikaları için
