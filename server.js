@@ -16,16 +16,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// HTTP'den HTTPS'e yönlendirme (production'da)
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`);
-    } else {
-      next();
-    }
-  });
-}
+// HTTP'den HTTPS'e yönlendirme kaldırıldı
+// Docker container'ında hem HTTP hem HTTPS aynı anda çalışıyor
 
 // CORS yapılandırması
 const allowedOrigins = [
