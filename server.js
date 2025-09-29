@@ -577,8 +577,16 @@ const sslPath = path.join(__dirname, 'ssl');
 const sslKeyPath = path.join(sslPath, 'privkey.pem');
 const sslCertPath = path.join(sslPath, 'fullchain.pem');
 
+console.log('SSL kontrol ediliyor...');
+console.log('SSL Path:', sslPath);
+console.log('SSL Key Path:', sslKeyPath);
+console.log('SSL Cert Path:', sslCertPath);
+console.log('SSL Key exists:', fs.existsSync(sslKeyPath));
+console.log('SSL Cert exists:', fs.existsSync(sslCertPath));
+
 if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
   try {
+    console.log('SSL sertifikaları bulundu, HTTPS server başlatılıyor...');
     const sslOptions = {
       key: fs.readFileSync(sslKeyPath),
       cert: fs.readFileSync(sslCertPath)
