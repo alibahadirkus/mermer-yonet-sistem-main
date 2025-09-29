@@ -16,6 +16,17 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// HTTP'den HTTPS'e yönlendirme (production'da)
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
+
 // CORS yapılandırması
 const allowedOrigins = [
   'http://localhost:8080',
@@ -60,7 +71,18 @@ app.use('/videos', express.static('public/videos', {
 }));
 app.use('/src', express.static('public'));
 
-// Frontend static dosyalarını serve et
+// Frontend static dosyalarını serve et (assets klasörü için özel)
+app.use('/assets', express.static('dist/assets', {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
+
+// Diğer static dosyalar
 app.use(express.static('dist'));
 
 // MySQL bağlantısı - Connection pooling ile
@@ -559,7 +581,19 @@ app.post('/api/products/from-pdf', upload.single('pdf'), async (req, res) => {
 });
 
 // SPA için tüm route'ları frontend'e yönlendir (API route'larından sonra)
-app.get('*', (req, res) => {
+// Static dosyalar ve API route'ları dışındaki tüm istekleri frontend'e yönlendir
+app.get('*', (req, res, next) => {
+  // API route'ları ve static dosyalar için kontrol
+  if (req.path.startsWith('/api/') || 
+      req.path.startsWith('/images/') || 
+      req.path.startsWith('/pdfs/') || 
+      req.path.startsWith('/videos/') || 
+      req.path.startsWith('/assets/') ||
+      req.path.startsWith('/src/')) {
+    return next();
+  }
+  
+  // Diğer tüm istekleri frontend'e yönlendir
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
