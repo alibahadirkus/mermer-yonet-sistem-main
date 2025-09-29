@@ -66,6 +66,7 @@ app.use('/src', express.static('public'));
 // Frontend static dosyalarını serve et (SPA routing'den önce)
 app.use('/assets', express.static('dist/assets', {
   setHeaders: (res, path) => {
+    console.log('Serving asset:', path);
     if (path.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
     } else if (path.endsWith('.js')) {
@@ -75,7 +76,11 @@ app.use('/assets', express.static('dist/assets', {
 }));
 
 // Diğer static dosyalar
-app.use(express.static('dist'));
+app.use(express.static('dist', {
+  setHeaders: (res, path) => {
+    console.log('Serving static file:', path);
+  }
+}));
 
 // MySQL bağlantısı - Connection pooling ile
 const db = mysql.createPool({
