@@ -63,18 +63,19 @@ app.use('/videos', express.static('public/videos', {
 }));
 app.use('/src', express.static('public'));
 
-// Frontend static dosyalarını serve et
-app.use(express.static('dist', {
+// Frontend static dosyalarını serve et (SPA routing'den önce)
+app.use('/assets', express.static('dist/assets', {
   setHeaders: (res, path) => {
     if (path.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
     } else if (path.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript');
-    } else if (path.endsWith('.html')) {
-      res.setHeader('Content-Type', 'text/html');
     }
   }
 }));
+
+// Diğer static dosyalar
+app.use(express.static('dist'));
 
 // MySQL bağlantısı - Connection pooling ile
 const db = mysql.createPool({
