@@ -573,28 +573,10 @@ app.post('/api/products/from-pdf', upload.single('pdf'), async (req, res) => {
 });
 
 // SPA için tüm route'ları frontend'e yönlendir (API route'larından sonra)
-// Static dosyalar ve API route'ları dışındaki tüm istekleri frontend'e yönlendir
-app.get('*', (req, res, next) => {
-  // API route'ları ve static dosyalar için kontrol
-  if (req.path.startsWith('/api/') || 
-      req.path.startsWith('/images/') || 
-      req.path.startsWith('/pdfs/') || 
-      req.path.startsWith('/videos/') || 
-      req.path.startsWith('/assets/') ||
-      req.path.startsWith('/src/') ||
-      req.path.includes('.css') ||
-      req.path.includes('.js') ||
-      req.path.includes('.png') ||
-      req.path.includes('.jpg') ||
-      req.path.includes('.jpeg') ||
-      req.path.includes('.gif') ||
-      req.path.includes('.svg') ||
-      req.path.includes('.ico') ||
-      req.path.includes('.woff') ||
-      req.path.includes('.woff2') ||
-      req.path.includes('.ttf') ||
-      req.path.includes('.eot')) {
-    return next();
+app.get('*', (req, res) => {
+  // Sadece API route'ları dışındaki istekleri frontend'e yönlendir
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
   }
   
   // Diğer tüm istekleri frontend'e yönlendir
