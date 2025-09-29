@@ -25,7 +25,11 @@ const allowedOrigins = [
   'http://localhost:8081', 
   'http://localhost:8082',
   'http://frontend:8080',
-  'http://77.223.133.173'
+  'http://77.223.133.173',
+  'https://acmadencilik.com.tr',
+  'https://www.acmadencilik.com.tr',
+  'http://acmadencilik.com.tr',
+  'http://www.acmadencilik.com.tr'
 ];
 
 app.use(cors({
@@ -36,6 +40,7 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -66,7 +71,7 @@ app.use('/src', express.static('public'));
 // Frontend static dosyalarını serve et
 app.use(express.static('dist'));
 
-// Assets klasörü için özel route
+// Assets klasörü için özel route (CORS'dan muaf)
 app.get('/assets/*', (req, res) => {
   const filePath = path.join(__dirname, 'dist', req.path);
   const ext = path.extname(filePath);
@@ -84,6 +89,7 @@ app.get('/assets/*', (req, res) => {
   }
   
   res.setHeader('Content-Type', mimeType);
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(filePath);
 });
 
