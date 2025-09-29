@@ -564,6 +564,35 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server ${PORT} portunda çalışıyor`);
-}); 
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+
+// HTTP server
+const httpServer = http.createServer(app);
+httpServer.listen(PORT, () => {
+  console.log(`HTTP Server ${PORT} portunda çalışıyor`);
+});
+
+// HTTPS server (SSL sertifikaları varsa)
+const sslPath = path.join(__dirname, 'ssl');
+const sslKeyPath = path.join(sslPath, 'privkey.pem');
+const sslCertPath = path.join(sslPath, 'fullchain.pem');
+
+if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
+  try {
+    const sslOptions = {
+      key: fs.readFileSync(sslKeyPath),
+      cert: fs.readFileSync(sslCertPath)
+    };
+    
+    const httpsServer = https.createServer(sslOptions, app);
+    httpsServer.listen(HTTPS_PORT, () => {
+      console.log(`HTTPS Server ${HTTPS_PORT} portunda çalışıyor`);
+    });
+  } catch (error) {
+    console.error('SSL sertifika yükleme hatası:', error);
+    console.log('HTTPS server başlatılamadı, sadece HTTP çalışıyor');
+  }
+} else {
+  console.log('SSL sertifikaları bulunamadı, sadece HTTP çalışıyor');
+  console.log(`SSL sertifikaları için: ${sslKeyPath} ve ${sslCertPath} dosyalarını oluşturun`);
+} 
