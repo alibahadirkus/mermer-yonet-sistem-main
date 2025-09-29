@@ -63,19 +63,18 @@ app.use('/videos', express.static('public/videos', {
 }));
 app.use('/src', express.static('public'));
 
-// Frontend static dosyalarını serve et (assets klasörü için özel)
-app.use('/assets', express.static('dist/assets', {
+// Frontend static dosyalarını serve et
+app.use(express.static('dist', {
   setHeaders: (res, path) => {
     if (path.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
     } else if (path.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript');
+    } else if (path.endsWith('.html')) {
+      res.setHeader('Content-Type', 'text/html');
     }
   }
 }));
-
-// Diğer static dosyalar
-app.use(express.static('dist'));
 
 // MySQL bağlantısı - Connection pooling ile
 const db = mysql.createPool({
@@ -581,7 +580,19 @@ app.get('*', (req, res, next) => {
       req.path.startsWith('/pdfs/') || 
       req.path.startsWith('/videos/') || 
       req.path.startsWith('/assets/') ||
-      req.path.startsWith('/src/')) {
+      req.path.startsWith('/src/') ||
+      req.path.includes('.css') ||
+      req.path.includes('.js') ||
+      req.path.includes('.png') ||
+      req.path.includes('.jpg') ||
+      req.path.includes('.jpeg') ||
+      req.path.includes('.gif') ||
+      req.path.includes('.svg') ||
+      req.path.includes('.ico') ||
+      req.path.includes('.woff') ||
+      req.path.includes('.woff2') ||
+      req.path.includes('.ttf') ||
+      req.path.includes('.eot')) {
     return next();
   }
   
