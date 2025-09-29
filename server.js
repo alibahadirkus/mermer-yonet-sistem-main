@@ -63,24 +63,29 @@ app.use('/videos', express.static('public/videos', {
 }));
 app.use('/src', express.static('public'));
 
-// Frontend static dosyalarını serve et (SPA routing'den önce)
-app.use('/assets', express.static('dist/assets', {
-  setHeaders: (res, path) => {
-    console.log('Serving asset:', path);
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
+// Frontend static dosyalarını serve et
+app.use(express.static('dist'));
 
-// Diğer static dosyalar
-app.use(express.static('dist', {
-  setHeaders: (res, path) => {
-    console.log('Serving static file:', path);
+// Assets klasörü için özel route
+app.get('/assets/*', (req, res) => {
+  const filePath = path.join(__dirname, 'dist', req.path);
+  const ext = path.extname(filePath);
+  
+  console.log('Serving asset:', req.path, '->', filePath);
+  
+  // MIME type belirle
+  let mimeType = 'text/plain';
+  if (ext === '.css') {
+    mimeType = 'text/css';
+  } else if (ext === '.js') {
+    mimeType = 'application/javascript';
+  } else if (ext === '.html') {
+    mimeType = 'text/html';
   }
-}));
+  
+  res.setHeader('Content-Type', mimeType);
+  res.sendFile(filePath);
+});
 
 // MySQL bağlantısı - Connection pooling ile
 const db = mysql.createPool({
