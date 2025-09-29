@@ -5,6 +5,8 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import https from 'https';
+import http from 'http';
 // import pdf from 'pdf-parse'; // Bu modül sorunlu, kaldırıldı
 import { exec } from 'child_process';
 import { promisify } from 'util';
