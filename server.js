@@ -231,6 +231,22 @@ app.get('/api/news', (req, res) => {
   });
 });
 
+// Tekil haber detayı için API endpoint'i
+app.get('/api/news/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('SELECT * FROM news WHERE id = ?', [id], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Haber bulunamadı' });
+      return;
+    }
+    res.json(results[0]);
+  });
+});
+
 app.post('/api/news', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'video', maxCount: 1 }

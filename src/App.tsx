@@ -20,6 +20,7 @@ import AdminReferences from "./pages/admin/AdminReferences";
 import AdminCategories from "./pages/admin/Categories";
 import AdminTeam from "./pages/admin/Team";
 import News from "./pages/News";
+import NewsDetail from "./pages/NewsDetail";
 import NotFound from "./pages/NotFound";
 import VirtualViewer from '@/pages/VirtualViewer';
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/references" element={<References />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/urunler" element={<AdminProducts />} />
             <Route path="/admin/haberler" element={<AdminNews />} />

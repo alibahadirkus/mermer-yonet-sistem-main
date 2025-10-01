@@ -34,17 +34,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="bg-white border-b border-marble-100 sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="h-10 w-10 flex items-center justify-center bg-marble-600 rounded-lg">
+            <div className="h-12 w-12 flex items-center justify-center bg-white rounded-lg shadow-sm">
               <img 
-                src="/alibahadir/ae66d9f3-34f6-4152-babb-d29ecf4dd8f4.png" 
+                src="/ac-madencilik-logo.png" 
                 alt="AC Madencilik Logo" 
-                className="h-8 w-auto"
+                className="h-10 w-auto"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   const parent = target.parentElement;
                   if (parent) {
-                    parent.innerHTML = '<span class="text-white font-bold text-lg">AC</span>';
+                    parent.innerHTML = '<span class="text-marble-600 font-bold text-lg">AC</span>';
                   }
                 }}
               />

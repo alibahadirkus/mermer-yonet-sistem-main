@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { useContent } from "@/contexts/ContentContext";
@@ -32,7 +33,8 @@ const News = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {news.map((item) => (
-              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
+              <Link key={item.id} to={`/news/${item.id}`} className="block">
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105">
                 <div className="h-64 overflow-hidden relative">
                   {item.video_path ? (
                     <video 
@@ -140,7 +142,8 @@ const News = () => {
                   </p>
                   {item.summary && <p className="text-marble-700">{item.summary}</p>}
                 </CardContent>
-              </Card>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
